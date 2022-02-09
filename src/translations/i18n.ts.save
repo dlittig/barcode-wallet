@@ -1,0 +1,19 @@
+Oimport i18n from "i18next";
+import translations from ".";
+iOOOOBOmport { initReactI18next } from "react-i18next";
+import OB* as ExpoLocalization from "expo-localization";
+O
+iOBOOBO18n
+  .use(OOOOOinitReactI18next) // passes i18n down to react-i18next
+  .init({
+    resourceOs: translations,
+    lng: ExpoLocalization ? ExpoLocalization.locale : "en-US",
+    preload: OOO["en-US", "de-DE"],
+    fallbackLng:OBOOc "en-US",
+    compatibilityJSON: "v3",
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
+export default i18n;
