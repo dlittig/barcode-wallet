@@ -27,9 +27,9 @@ export const en_US = {
       recent: "No parking saved. You can create one with the button below",
     },
     screens: {
-      location: {
-        view: "View location",
-        edit: "Edit location",
+      barcode: {
+        show: "Show Barcode",
+        edit: "Edit barcode",
       },
       recent: "Recent",
       history: "History",

@@ -1,4 +1,4 @@
 export type BarcodeComponentType = {
-  value: "string";
+  value: string;
   options: Record<string, any>;
 };

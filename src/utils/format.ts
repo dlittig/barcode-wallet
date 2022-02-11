@@ -59,3 +59,10 @@ export const getLocalDateTime = (
 
   return datetime;
 };
+
+export const capitalize = (value: string) => {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
+};

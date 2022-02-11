@@ -1,15 +1,19 @@
 import React, { FC, useEffect, useState } from "react";
-import Svg, { G } from "react-native-svg";
 import JSBarcode from "jsbarcode";
-import { BarcodeComponentType } from "./types";
+import { View } from "react-native";
+import Svg, { G } from "react-native-svg";
+
 import {
   calculateEncodingAttributes,
   getMaximumHeightOfEncodings,
   getTotalWidthOfEncodings,
 } from "../../utils";
+import { BarcodeComponentType } from "./types";
 import Background from "./elements/Background";
-import BarcodeChunk from "./elements/BarcodeChunk";
 import BarcodeText from "./elements/BarcodeText";
+import BarcodeChunk from "./elements/BarcodeChunk";
+
+import style from "./Barcode.style";
 
 const defaults = {
   width: 2,
@@ -54,9 +58,7 @@ const Barcode: FC<BarcodeComponentType> = ({ value, options }) => {
 
       const totalWidth = getTotalWidthOfEncodings(encodings);
       setHeight(getMaximumHeightOfEncodings(encodings));
-      setWidth(
-        totalWidth + newOptions.marginLeft + newOptions.marginRight
-      );
+      setWidth(totalWidth + newOptions.marginLeft + newOptions.marginRight);
 
       const xs = [newOptions.marginLeft];
       encodings.forEach((e) => xs.push(xs[xs.length - 1] + e.width));
@@ -71,7 +73,7 @@ const Barcode: FC<BarcodeComponentType> = ({ value, options }) => {
   );
 
   return (
-    <>
+    <View style={style.container}>
       {ready && (
         <Svg
           x={0}
@@ -115,7 +117,7 @@ const Barcode: FC<BarcodeComponentType> = ({ value, options }) => {
           })}
         </Svg>
       )}
-    </>
+    </View>
   );
 };
 

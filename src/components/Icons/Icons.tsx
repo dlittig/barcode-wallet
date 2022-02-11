@@ -15,6 +15,7 @@ const Icons = {
   Localize: (props: any) => <Icon {...props} name="pin-outline" />,
   Navigation: (props: any) => <Icon {...props} name="navigation-outline" />,
   Next: (props: any) => <Icon {...props} name="arrow-right-outline" />,
+  Open: (props: any) => <Icon {...props} name="external-link-outline" />,
   Park: (props: any) => <Icon {...props} name="flag-outline" />,
   Previous: (props: any) => <Icon {...props} name="arrow-left-outline" />,
   Remove: (props: any) => <Icon {...props} name="trash-2-outline" />,

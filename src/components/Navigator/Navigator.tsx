@@ -6,14 +6,12 @@ import { withStyles } from "@ui-kitten/components";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, TransitionSpecs } from "@react-navigation/stack";
 
-import {
-  APP_HOME,
-  APP_SETTINGS,
-} from "./Routes";
+import { APP_BARCODE_EDIT, APP_HOME, APP_SETTINGS } from "./Routes";
 import Home from "../../screens/Home";
 import Settings from "../../screens/Settings";
 import { NavigatorComponentType } from "./types";
 import Navigation from "../../services/navigation";
+import EditBarcode from "../../screens/Barcode/EditBarcode/EditBarcode";
 
 const Stack = createStackNavigator();
 
@@ -37,6 +35,11 @@ const Navigator: FC<NavigatorComponentType> = ({ eva }) => {
       >
         <Stack.Navigator initialRouteName={t(APP_HOME)}>
           <Stack.Screen name={t(APP_HOME)} options={options} component={Home} />
+          <Stack.Screen
+            name={t(APP_BARCODE_EDIT)}
+            options={options}
+            component={EditBarcode}
+          />
           <Stack.Screen
             name={t(APP_SETTINGS)}
             options={options}

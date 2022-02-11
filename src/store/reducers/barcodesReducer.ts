@@ -15,7 +15,7 @@ const initialState: BarcodeState = {
   sortedBarcodes: [],
 };
 
-export const parkingsReducer = (
+export const barcodesReducer = (
   state = initialState,
   action: BarcodeActionType | CommonActionType
 ): BarcodeState => {

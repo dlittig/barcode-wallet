@@ -1,2 +1,2 @@
-export * from "./barcodeSelectors";
+export * from "./barcodesSelector";
 export * from "./settingsSelector";
