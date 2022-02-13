@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { View } from "react-native";
 import { Card as UIKittenCard, Text } from "@ui-kitten/components";
 
@@ -15,7 +15,11 @@ const Card: FC<CardComponentType> = ({
   color,
   onOpen,
 }) => (
-  <UIKittenCard footer={() => <Footer onOpen={onOpen} />} style={style.card} status={color}>
+  <UIKittenCard
+    footer={() => <Footer onOpen={onOpen} />}
+    style={style.card}
+    status={color}
+  >
     <View style={style.header}>
       <Text category="h1" style={[style.textCenter, style.title]}>
         {capitalize(name)}
@@ -36,4 +40,4 @@ export enum CARD_COLOR {
   GREY = "basic",
 }
 
-export default Card;
+export default React.memo(Card);
