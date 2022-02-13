@@ -1,12 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import {
   Button,
+  ButtonGroup,
   IndexPath,
   Input,
   Select,
   SelectItem,
+  Text,
 } from "@ui-kitten/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import BaseLayout from "../../../components/BaseLayout";
@@ -23,12 +25,23 @@ import {
   BARCODE_TYPE_ENUMERABLE,
 } from "../../../store/types";
 import { take } from "../../../utils";
+import * as RNImagePicker from "expo-image-picker";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { v4 as uuidv4 } from "uuid";
 import {
   addBarcode,
   updateBarcode,
 } from "../../../store/actions/barcodeActions";
+import { View } from "react-native";
+
+import style from "./EditBarcode.style";
+
+enum INPUT_TYPE {
+  TEXT = "INPUT_TYPE_TEXT",
+  FILE = "INPUT_TYPE_FILE",
+  CAMERA = "INPUT_TYPE_CAMERA",
+}
 
 const EditBarcode = ({ route }: { route: any }) => {
   const barcodeId = route.params ? (route.params["id"] as string) : "";
@@ -51,6 +64,7 @@ const EditBarcode = ({ route }: { route: any }) => {
   const [codeType, setCodeType] = useState(
     take(barcode, "type", BARCODE_TYPE.EAN13)
   );
+  const [inputType, setInputType] = useState<INPUT_TYPE>(INPUT_TYPE.TEXT);
   const navigation = useNavigation();
 
   const onSave = () => {
@@ -73,6 +87,38 @@ const EditBarcode = ({ route }: { route: any }) => {
     navigation.goBack();
   };
 
+  const retrieveFromFile = async () => {
+    try {
+      const { status } =
+        await RNImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status === "granted") {
+        const options: RNImagePicker.ImagePickerOptions = {
+          allowsMultipleSelection: false,
+          quality: 1,
+          mediaTypes: RNImagePicker.MediaTypeOptions.Images,
+          allowsEditing: false,
+        };
+        const imagePickerResult = await RNImagePicker.launchImageLibraryAsync(
+          options
+        );
+        if (imagePickerResult && !imagePickerResult.cancelled) {
+          const barcodeScannerResult = await BarCodeScanner.scanFromURLAsync(
+            imagePickerResult.uri
+          );
+
+          if (barcodeScannerResult.length === 1) {
+            const code = barcodeScannerResult[0];
+            setCode(code.data);
+          } else {
+            console.warn("Error, got too many items from barcodescanner.");
+          }
+        }
+      }
+    } catch (error) {
+      console.debug(error);
+    }
+  };
+
   return (
     <>
       <BackBar title={route.name} />
@@ -88,16 +134,62 @@ const EditBarcode = ({ route }: { route: any }) => {
             value={description}
             onChangeText={(nextValue) => setDescription(nextValue)}
           />
-          <Input
-            label="Code"
-            value={code}
-            onChangeText={(nextValue) => setCode(nextValue)}
-          />
+
+          <Text category="s2" appearance="hint">
+            Code
+          </Text>
+          <View style={style.inputTypeGroup}>
+            <Button
+              onPress={() => setInputType(INPUT_TYPE.TEXT)}
+              appearance={inputType === INPUT_TYPE.TEXT ? "filled" : "outline"}
+            >
+              Text
+            </Button>
+            <Button
+              style={style.middleButton}
+              onPress={() => setInputType(INPUT_TYPE.FILE)}
+              appearance={inputType === INPUT_TYPE.FILE ? "filled" : "outline"}
+            >
+              File
+            </Button>
+            <Button
+              onPress={() => setInputType(INPUT_TYPE.CAMERA)}
+              appearance={
+                inputType === INPUT_TYPE.CAMERA ? "filled" : "outline"
+              }
+            >
+              Camera
+            </Button>
+          </View>
+
+          {inputType === INPUT_TYPE.TEXT && (
+            <Input
+              label="Enter code"
+              value={code}
+              onChangeText={(nextValue) => setCode(nextValue)}
+            />
+          )}
+
+          {inputType === INPUT_TYPE.FILE && (
+            <Button
+              accessoryLeft={<Icons.Open />}
+              onPress={() => retrieveFromFile()}
+            >
+              <Text>Pick file from gallery</Text>
+            </Button>
+          )}
+
+          {inputType === INPUT_TYPE.CAMERA && (
+            <Button accessoryLeft={<Icons.Camera />}>
+              <Text>Take photo</Text>
+            </Button>
+          )}
+
           <Select
             selectedIndex={selectedCodeTypeIndex}
             onSelect={(index: IndexPath | IndexPath[]) => {
               setCodeTypeSelectedIndex(index);
-            Object.values(BARCODE_TYPE_ENUMERABLE)[1];
+              Object.values(BARCODE_TYPE_ENUMERABLE)[1];
             }}
           >
             {Object.values(BARCODE_TYPE_ENUMERABLE).map((type, key) => (

@@ -4,6 +4,7 @@ import { Icon } from "@ui-kitten/components";
 const Icons = {
   Add: (props: any) => <Icon {...props} name="plus-outline" />,
   Back: (props: any) => <Icon {...props} name="arrow-back-outline" />,
+  Camera: (props: any) => <Icon {...props} name="camera-outline" />,
   Clock: (props: any) => <Icon {...props} name="clock-outline" />,
   Close: (props: any) => <Icon {...props} name="close-circle" />,
   CreditCard: (props: any) => <Icon {...props} name="credit-card-outline" />,

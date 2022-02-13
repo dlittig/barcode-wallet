@@ -19,11 +19,13 @@ import List from "../../components/List";
 import MainAction from "../../components/MainAction";
 import TopBar from "../../components/Navigator/Bars/TopBar";
 import { APP_BARCODE_EDIT } from "../../components/Navigator/Routes";
+import Qrcode from "../../components/Qrcode";
 import { RootReducerType } from "../../store/reducers";
 import {
   barcodesAllSelector,
   barcodesByIdSelector,
 } from "../../store/selectors";
+import { BARCODE_TYPE } from "../../store/types";
 import { humanReadableDate, humanReadableTime } from "../../utils";
 import style from "./Home.style";
 
@@ -50,6 +52,8 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
     barcodesByIdSelector(state, id)
   );
 
+  console.log("type is", barcode.type);
+
   return (
     <>
       {id.length > 0 && (
@@ -71,7 +75,11 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
                 barcode.time
               )}`}</Text>
             </View>
-            <Barcode value={barcode.code} options={{ format: "EAN13" }} />
+            {barcode.type !== BARCODE_TYPE.QR ? (
+              <Barcode value={barcode.code} options={{ format: "EAN13" }} />
+            ) : (
+              <Qrcode value={barcode.code} />
+            )}
           </View>
         </UIKittenCard>
       )}
@@ -114,7 +122,7 @@ const Home: FC = () => {
             ))}
           </List>
 
-          <Modal visible={id.length > 0} backdropStyle={style.modalBackdrop}>
+          <Modal visible={id.length > 0} backdropStyle={style.modalBackdrop} onBackdropPress={onClose}>
             <ModalContent id={id} onClose={onClose} />
           </Modal>
           <MainAction>
