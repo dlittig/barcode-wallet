@@ -60,11 +60,17 @@ const EditBarcode = ({ route }: { route: any }) => {
   );
   const [selectedCodeTypeIndex, setCodeTypeSelectedIndex] = useState<
     IndexPath | IndexPath[]
-  >(new IndexPath(0));
-  const [codeType, setCodeType] = useState(
+  >(
+    new IndexPath(
+      Object.values(BARCODE_TYPE_ENUMERABLE).indexOf(
+        take(barcode, "type", BARCODE_TYPE.EAN13)
+      )
+    )
+  );
+  const [codeType, setCodeType] = useState<string>(
     take(barcode, "type", BARCODE_TYPE.EAN13)
   );
-  const [inputType, setInputType] = useState<INPUT_TYPE>(INPUT_TYPE.TEXT);
+  const [inputType, setInputType] = useState<string>(INPUT_TYPE.TEXT);
   const navigation = useNavigation();
 
   const onSave = () => {
@@ -74,7 +80,7 @@ const EditBarcode = ({ route }: { route: any }) => {
       description,
       color,
       code,
-      type: codeType,
+      type: codeType as BARCODE_TYPE,
       time: take(barcode, "time", Date.now()),
     };
 
@@ -189,7 +195,10 @@ const EditBarcode = ({ route }: { route: any }) => {
             selectedIndex={selectedCodeTypeIndex}
             onSelect={(index: IndexPath | IndexPath[]) => {
               setCodeTypeSelectedIndex(index);
-              Object.values(BARCODE_TYPE_ENUMERABLE)[1];
+              if (!Array.isArray(index)) {
+                const type = Object.values(BARCODE_TYPE_ENUMERABLE)[index.row];
+                setCodeType(type);
+              }
             }}
           >
             {Object.values(BARCODE_TYPE_ENUMERABLE).map((type, key) => (
