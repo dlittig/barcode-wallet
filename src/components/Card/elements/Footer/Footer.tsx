@@ -7,14 +7,14 @@ import style from "./Footer.style";
 import { FC } from "react";
 import { FooterComponentType } from "./types";
 
-const Footer: FC<FooterComponentType> = ({ onOpen }) => (
+const Footer: FC<FooterComponentType> = ({ onOpen, onEdit }) => (
   <View style={style.footer}>
     <Button
       style={style.button}
       size="small"
       appearance="ghost"
       accessoryLeft={Icons.Edit}
-      onPress={() => {}}
+      onPress={onEdit}
     >
       Edit
     </Button>
@@ -23,7 +23,7 @@ const Footer: FC<FooterComponentType> = ({ onOpen }) => (
       size="small"
       appearance="outline"
       accessoryLeft={Icons.Open}
-      onPress={() => onOpen()}
+      onPress={onOpen}
     >
       Show
     </Button>

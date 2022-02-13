@@ -14,9 +14,10 @@ const Card: FC<CardComponentType> = ({
   description,
   color,
   onOpen,
+  onEdit,
 }) => (
   <UIKittenCard
-    footer={() => <Footer onOpen={onOpen} />}
+    footer={() => <Footer onOpen={onOpen} onEdit={onEdit} />}
     style={style.card}
     status={color}
   >

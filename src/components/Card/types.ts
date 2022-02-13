@@ -6,4 +6,5 @@ export type CardComponentType = {
   name: string;
   description: string;
   onOpen: () => void;
+  onEdit: () => void;
 };

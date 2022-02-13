@@ -103,6 +103,12 @@ const Home: FC = () => {
                 name={barcode.name}
                 color={barcode.color}
                 description={barcode.description}
+                onEdit={() =>
+                  navigation.navigate(
+                    t(APP_BARCODE_EDIT) as never,
+                    { id: barcode.id } as never
+                  )
+                }
                 onOpen={() => setId(barcode.id)}
               />
             ))}
