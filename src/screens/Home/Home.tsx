@@ -70,13 +70,22 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
             <Text category="h5">{barcode.name}</Text>
             <Text category="h6">{barcode.description}</Text>
             <View style={modalStyle.timeInfo}>
-              <Text>Hinzugefügt am:</Text>
+              <Text>Added on:</Text>
               <Text>{`${humanReadableDate(barcode.time)} ${humanReadableTime(
                 barcode.time
               )}`}</Text>
             </View>
+            {barcode.expires && (
+              <View style={modalStyle.timeInfo}>
+                <Text>Expires on:</Text>
+                <Text>{`${humanReadableDate(barcode.expiryDate)}`}</Text>
+              </View>
+            )}
             {barcode.type !== BARCODE_TYPE.QR ? (
-              <Barcode value={barcode.code} options={{ format: "EAN13" }} />
+              <Barcode
+                value={barcode.code}
+                options={{ format: barcode.type }}
+              />
             ) : (
               <Qrcode value={barcode.code} />
             )}
@@ -122,7 +131,11 @@ const Home: FC = () => {
             ))}
           </List>
 
-          <Modal visible={id.length > 0} backdropStyle={style.modalBackdrop} onBackdropPress={onClose}>
+          <Modal
+            visible={id.length > 0}
+            backdropStyle={style.modalBackdrop}
+            onBackdropPress={onClose}
+          >
             <ModalContent id={id} onClose={onClose} />
           </Modal>
           <MainAction>

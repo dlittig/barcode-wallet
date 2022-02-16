@@ -2,11 +2,13 @@ import { useNavigation } from "@react-navigation/native";
 import {
   Button,
   ButtonGroup,
+  Datepicker,
   IndexPath,
   Input,
   Select,
   SelectItem,
   Text,
+  Toggle,
 } from "@ui-kitten/components";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,7 +26,7 @@ import {
   BARCODE_TYPE,
   BARCODE_TYPE_ENUMERABLE,
 } from "../../../store/types";
-import { take } from "../../../utils";
+import { humanReadableDate, take } from "../../../utils";
 import * as RNImagePicker from "expo-image-picker";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
@@ -36,6 +38,7 @@ import {
 import { View } from "react-native";
 
 import style from "./EditBarcode.style";
+import Fieldset from "../../../components/Fieldset";
 
 enum INPUT_TYPE {
   TEXT = "INPUT_TYPE_TEXT",
@@ -57,6 +60,10 @@ const EditBarcode = ({ route }: { route: any }) => {
   );
   const [color, setColor] = useState(
     take(barcode, "color", CARD_COLOR.LIGHT_BLUE)
+  );
+  const [expires, setExpires] = useState(take(barcode, "expires", false));
+  const [expiryDate, setExpiryDate] = useState(
+    new Date(take(barcode, "expiryDate", Date.now()))
   );
   const [selectedCodeTypeIndex, setCodeTypeSelectedIndex] = useState<
     IndexPath | IndexPath[]
@@ -80,6 +87,8 @@ const EditBarcode = ({ route }: { route: any }) => {
       description,
       color,
       code,
+      expires,
+      expiryDate: expiryDate.getTime(),
       type: codeType as BARCODE_TYPE,
       time: take(barcode, "time", Date.now()),
     };
@@ -130,84 +139,122 @@ const EditBarcode = ({ route }: { route: any }) => {
       <BackBar title={route.name} />
       <BaseLayout level="2">
         <List level="1" spacer padding>
-          <Input
-            label={t("text.location.name") as string}
-            value={name}
-            onChangeText={(nextValue) => setName(nextValue)}
-          />
-          <Input
-            label={"Description"}
-            value={description}
-            onChangeText={(nextValue) => setDescription(nextValue)}
-          />
-
-          <Text category="s2" appearance="hint">
-            Code
-          </Text>
-          <View style={style.inputTypeGroup}>
-            <Button
-              onPress={() => setInputType(INPUT_TYPE.TEXT)}
-              appearance={inputType === INPUT_TYPE.TEXT ? "filled" : "outline"}
-            >
-              Text
-            </Button>
-            <Button
-              style={style.middleButton}
-              onPress={() => setInputType(INPUT_TYPE.FILE)}
-              appearance={inputType === INPUT_TYPE.FILE ? "filled" : "outline"}
-            >
-              File
-            </Button>
-            <Button
-              onPress={() => setInputType(INPUT_TYPE.CAMERA)}
-              appearance={
-                inputType === INPUT_TYPE.CAMERA ? "filled" : "outline"
-              }
-            >
-              Camera
-            </Button>
-          </View>
-
-          {inputType === INPUT_TYPE.TEXT && (
+          <Fieldset>
             <Input
-              label="Enter code"
-              value={code}
-              onChangeText={(nextValue) => setCode(nextValue)}
+              label={t("text.location.name") as string}
+              value={name}
+              onChangeText={(nextValue) => setName(nextValue)}
             />
-          )}
+          </Fieldset>
 
-          {inputType === INPUT_TYPE.FILE && (
-            <Button
-              accessoryLeft={<Icons.Open />}
-              onPress={() => retrieveFromFile()}
-            >
-              <Text>Pick file from gallery</Text>
-            </Button>
-          )}
+          <Fieldset>
+            <Input
+              label={"Description"}
+              value={description}
+              onChangeText={(nextValue) => setDescription(nextValue)}
+            />
+          </Fieldset>
 
-          {inputType === INPUT_TYPE.CAMERA && (
-            <Button accessoryLeft={<Icons.Camera />}>
-              <Text>Take photo</Text>
-            </Button>
-          )}
-
-          <Select
-            selectedIndex={selectedCodeTypeIndex}
-            onSelect={(index: IndexPath | IndexPath[]) => {
-              setCodeTypeSelectedIndex(index);
-              if (!Array.isArray(index)) {
-                const type = Object.values(BARCODE_TYPE_ENUMERABLE)[index.row];
-                setCodeType(type);
-              }
-            }}
-          >
-            {Object.values(BARCODE_TYPE_ENUMERABLE).map((type, key) => (
-              <SelectItem
-                title={type}
-                key={`select-item-barcode-type-${key}`}
+          <Fieldset>
+            <Text category="c1" appearance="hint">
+              Expires
+            </Text>
+            <View style={style.expiryContainer}>
+              <Datepicker
+                style={{ flexGrow: 2 }}
+                disabled={!expires}
+                date={expiryDate}
+                onSelect={(nextDate) => setExpiryDate(nextDate)}
+                min={new Date()}
               />
-            ))}
-          </Select>
+              <Toggle
+                checked={expires}
+                onChange={setExpires}
+                style={style.toggle}
+              ></Toggle>
+            </View>
+          </Fieldset>
+
+          <Fieldset>
+            <Text category="c1" appearance="hint">
+              Code
+            </Text>
+            <View style={style.inputTypeGroup}>
+              <Button
+                onPress={() => setInputType(INPUT_TYPE.TEXT)}
+                appearance={
+                  inputType === INPUT_TYPE.TEXT ? "filled" : "outline"
+                }
+              >
+                Text
+              </Button>
+              <Button
+                style={style.middleButton}
+                onPress={() => setInputType(INPUT_TYPE.FILE)}
+                appearance={
+                  inputType === INPUT_TYPE.FILE ? "filled" : "outline"
+                }
+              >
+                File
+              </Button>
+              <Button
+                onPress={() => setInputType(INPUT_TYPE.CAMERA)}
+                appearance={
+                  inputType === INPUT_TYPE.CAMERA ? "filled" : "outline"
+                }
+              >
+                Camera
+              </Button>
+            </View>
+
+            {inputType === INPUT_TYPE.TEXT && (
+              <Input
+                label="Enter code"
+                value={code}
+                onChangeText={(nextValue) => setCode(nextValue)}
+              />
+            )}
+
+            {inputType === INPUT_TYPE.FILE && (
+              <Button
+                accessoryLeft={<Icons.Open />}
+                status="success"
+                onPress={() => retrieveFromFile()}
+              >
+                <Text>Pick file from gallery</Text>
+              </Button>
+            )}
+
+            {inputType === INPUT_TYPE.CAMERA && (
+              <Button accessoryLeft={<Icons.Camera />} status="success">
+                <Text>Take photo</Text>
+              </Button>
+            )}
+          </Fieldset>
+
+          <Fieldset>
+            <Select
+              label="Type"
+              value={codeType}
+              selectedIndex={selectedCodeTypeIndex}
+              onSelect={(index: IndexPath | IndexPath[]) => {
+                setCodeTypeSelectedIndex(index);
+                if (!Array.isArray(index)) {
+                  const type = Object.values(BARCODE_TYPE_ENUMERABLE)[
+                    index.row
+                  ];
+                  setCodeType(type);
+                }
+              }}
+            >
+              {Object.values(BARCODE_TYPE_ENUMERABLE).map((type, key) => (
+                <SelectItem
+                  title={type}
+                  key={`select-item-barcode-type-${key}`}
+                />
+              ))}
+            </Select>
+          </Fieldset>
         </List>
         <MainAction border>
           <Button accessoryLeft={Icons.Save} onPress={onSave}>
