@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
   toggle: {
     marginLeft: 8,
   },
+  label: {
+    marginBottom: 6
+  }
 });
 
 export default styles;

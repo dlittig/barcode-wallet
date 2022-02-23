@@ -26,7 +26,7 @@ import {
   BARCODE_TYPE,
   BARCODE_TYPE_ENUMERABLE,
 } from "../../../store/types";
-import { humanReadableDate, take } from "../../../utils";
+import { take } from "../../../utils";
 import * as RNImagePicker from "expo-image-picker";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
@@ -39,6 +39,7 @@ import { View } from "react-native";
 
 import style from "./EditBarcode.style";
 import Fieldset from "../../../components/Fieldset";
+import Colorpicker from "../../../components/Colorpicker";
 
 enum INPUT_TYPE {
   TEXT = "INPUT_TYPE_TEXT",
@@ -156,7 +157,7 @@ const EditBarcode = ({ route }: { route: any }) => {
           </Fieldset>
 
           <Fieldset>
-            <Text category="c1" appearance="hint">
+            <Text category="c1" appearance="hint" style={style.label}>
               Expires
             </Text>
             <View style={style.expiryContainer}>
@@ -176,7 +177,17 @@ const EditBarcode = ({ route }: { route: any }) => {
           </Fieldset>
 
           <Fieldset>
-            <Text category="c1" appearance="hint">
+            <Text category="c1" appearance="hint" style={style.label}>
+              Color
+            </Text>
+            <Colorpicker
+              value={color}
+              onSelect={(color) => setColor(color)}
+            />
+          </Fieldset>
+
+          <Fieldset>
+            <Text category="c1" appearance="hint" style={style.label}>
               Code
             </Text>
             <View style={style.inputTypeGroup}>
