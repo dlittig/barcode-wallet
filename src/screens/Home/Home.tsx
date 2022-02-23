@@ -13,14 +13,13 @@ import { useSelector } from "react-redux";
 import Barcode from "../../components/Barcode";
 
 import BaseLayout from "../../components/BaseLayout";
-import Card, { CARD_COLOR } from "../../components/Card/Card";
+import Card from "../../components/Card/Card";
 import Icons from "../../components/Icons";
 import List from "../../components/List";
 import MainAction from "../../components/MainAction";
 import TopBar from "../../components/Navigator/Bars/TopBar";
 import { APP_BARCODE_EDIT } from "../../components/Navigator/Routes";
 import Qrcode from "../../components/Qrcode";
-import Skeleton from "../../components/Skeleton";
 import { RootReducerType } from "../../store/reducers";
 import {
   barcodesAllSelector,
@@ -95,9 +94,7 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
                 options={{ format: barcode.type }}
               />
             ) : (
-              <Qrcode
-                value={barcode.code}
-              />
+              <Qrcode value={barcode.code} />
             )}
           </View>
         </UIKittenCard>

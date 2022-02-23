@@ -1,8 +1,6 @@
-import { CARD_COLOR } from "./Card";
-
 export type CardComponentType = {
   id: string;
-  color: CARD_COLOR;
+  color: string;
   name: string;
   description: string;
   onOpen: () => void;

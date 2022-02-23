@@ -24,7 +24,6 @@ import { barcodesByIdSelector } from "../../../store/selectors";
 import {
   Barcode,
   BARCODE_TYPE,
-  BARCODE_TYPE_ENUMERABLE,
 } from "../../../store/types";
 import { take } from "../../../utils";
 import * as RNImagePicker from "expo-image-picker";
@@ -70,7 +69,7 @@ const EditBarcode = ({ route }: { route: any }) => {
     IndexPath | IndexPath[]
   >(
     new IndexPath(
-      Object.values(BARCODE_TYPE_ENUMERABLE).indexOf(
+      Object.values(BARCODE_TYPE).indexOf(
         take(barcode, "type", BARCODE_TYPE.EAN13)
       )
     )
@@ -90,7 +89,7 @@ const EditBarcode = ({ route }: { route: any }) => {
       code,
       expires,
       expiryDate: expiryDate.getTime(),
-      type: codeType as BARCODE_TYPE,
+      type: codeType,
       time: take(barcode, "time", Date.now()),
     };
 
@@ -251,14 +250,14 @@ const EditBarcode = ({ route }: { route: any }) => {
               onSelect={(index: IndexPath | IndexPath[]) => {
                 setCodeTypeSelectedIndex(index);
                 if (!Array.isArray(index)) {
-                  const type = Object.values(BARCODE_TYPE_ENUMERABLE)[
+                  const type = Object.values(BARCODE_TYPE)[
                     index.row
                   ];
                   setCodeType(type);
                 }
               }}
             >
-              {Object.values(BARCODE_TYPE_ENUMERABLE).map((type, key) => (
+              {Object.values(BARCODE_TYPE).map((type, key) => (
                 <SelectItem
                   title={type}
                   key={`select-item-barcode-type-${key}`}

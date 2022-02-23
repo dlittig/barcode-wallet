@@ -32,13 +32,13 @@ const Card: FC<CardComponentType> = ({
   </UIKittenCard>
 );
 
-export enum CARD_COLOR {
-  DARK_BLUE = "primary",
-  GREEN = "success",
-  LIGHT_BLUE = "info",
-  YELLOW = "warning",
-  RED = "danger",
-  GREY = "basic",
-}
+export const CARD_COLOR = {
+  DARK_BLUE: "primary",
+  GREEN: "success",
+  LIGHT_BLUE: "info",
+  YELLOW: "warning",
+  RED: "danger",
+  GREY: "basic",
+};
 
 export default React.memo(Card);

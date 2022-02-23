@@ -1,13 +1,4 @@
-import { CARD_COLOR } from "../../components/Card/Card";
-
-export enum BARCODE_TYPE {
-  QR = "QR",
-  EAN13 = "EAN13",
-  EAN8 = "EAN8",
-  CODE128 = "CODE128",
-}
-
-export const BARCODE_TYPE_ENUMERABLE = {
+export const BARCODE_TYPE = {
   QR: "QR",
   EAN13: "EAN13",
   EAN8: "EAN8",
@@ -18,8 +9,8 @@ export type Barcode = {
   id: string;
   name: string;
   description: string;
-  color: CARD_COLOR;
-  type: BARCODE_TYPE;
+  color: string;
+  type: string;
   time: number;
   code: string;
   expires: boolean;

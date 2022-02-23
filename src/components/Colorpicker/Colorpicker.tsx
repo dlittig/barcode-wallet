@@ -5,12 +5,6 @@ import { CARD_COLOR } from "../Card/Card";
 import Icons from "../Icons";
 import { ColorpickerComponentType } from "./types";
 
-const COLORS: CARD_COLOR[] = [];
-
-for (const color in CARD_COLOR) {
-  COLORS.push(CARD_COLOR[color] as CARD_COLOR);
-}
-
 const Colorpicker: FC<ColorpickerComponentType> = ({ value, onSelect }) => {
   const [selectedValue, setSelectedValue] = useState(value);
 
@@ -22,12 +16,13 @@ const Colorpicker: FC<ColorpickerComponentType> = ({ value, onSelect }) => {
         flex: 1,
       }}
     >
-      {COLORS.map((color, index) => (
+      {Object.values(CARD_COLOR).map((color, index) => (
         <Button
           style={{
             width: Dimensions.get("window").width * 0.2,
             marginRight: 10,
             marginVertical: 5,
+            height: 40,
           }}
           key={`color-picker-${color}-${index}`}
           status={color}
@@ -36,9 +31,7 @@ const Colorpicker: FC<ColorpickerComponentType> = ({ value, onSelect }) => {
             setSelectedValue(color);
             onSelect(color);
           }}
-        >
-          {selectedValue !== color ? "   " : ""}
-        </Button>
+        ></Button>
       ))}
     </View>
   );
