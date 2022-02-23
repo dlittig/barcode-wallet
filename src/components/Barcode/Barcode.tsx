@@ -37,7 +37,11 @@ const defaults = {
   // valid: function(){}
 };
 
-const Barcode: FC<BarcodeComponentType> = ({ value, options }) => {
+const Barcode: FC<BarcodeComponentType> = ({
+  value,
+  options,
+  style: styleProp,
+}) => {
   const [ready, setReady] = useState(false);
   const [xCoordinates, setXCoordinates] = useState<number[]>([]);
   const [encodings, setEncodings] = useState<Record<string, any>[]>([]);
@@ -73,7 +77,7 @@ const Barcode: FC<BarcodeComponentType> = ({ value, options }) => {
   );
 
   return (
-    <View style={style.container}>
+    <View style={[style.container, styleProp]}>
       {ready && (
         <Svg
           x={0}

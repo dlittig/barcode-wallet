@@ -6,9 +6,9 @@ import {
   Card as UIKittenCard,
 } from "@ui-kitten/components";
 import { useFonts } from "expo-font";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import Barcode from "../../components/Barcode";
 
@@ -20,6 +20,7 @@ import MainAction from "../../components/MainAction";
 import TopBar from "../../components/Navigator/Bars/TopBar";
 import { APP_BARCODE_EDIT } from "../../components/Navigator/Routes";
 import Qrcode from "../../components/Qrcode";
+import Skeleton from "../../components/Skeleton";
 import { RootReducerType } from "../../store/reducers";
 import {
   barcodesAllSelector,
@@ -81,13 +82,22 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
                 <Text>{`${humanReadableDate(barcode.expiryDate)}`}</Text>
               </View>
             )}
+
+            {/* Just a box to give the modal a certain width */}
+            <View
+              style={{ width: Dimensions.get("window").width * 0.6 }}
+            ></View>
+
+            {/* <Skeleton isLoading={isLoading}></Skeleton> */}
             {barcode.type !== BARCODE_TYPE.QR ? (
               <Barcode
                 value={barcode.code}
                 options={{ format: barcode.type }}
               />
             ) : (
-              <Qrcode value={barcode.code} />
+              <Qrcode
+                value={barcode.code}
+              />
             )}
           </View>
         </UIKittenCard>
