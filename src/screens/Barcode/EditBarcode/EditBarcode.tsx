@@ -21,10 +21,7 @@ import MainAction from "../../../components/MainAction";
 import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
 import { RootReducerType } from "../../../store/reducers";
 import { barcodesByIdSelector } from "../../../store/selectors";
-import {
-  Barcode,
-  BARCODE_TYPE,
-} from "../../../store/types";
+import { Barcode, BARCODE_TYPE } from "../../../store/types";
 import { take } from "../../../utils";
 import * as RNImagePicker from "expo-image-picker";
 import { BarCodeScanner } from "expo-barcode-scanner";
@@ -117,13 +114,25 @@ const EditBarcode = ({ route }: { route: any }) => {
           options
         );
         if (imagePickerResult && !imagePickerResult.cancelled) {
+          const allowedCodes = [
+            BarCodeScanner.Constants.BarCodeType.qr,
+            BarCodeScanner.Constants.BarCodeType.ean8,
+            BarCodeScanner.Constants.BarCodeType.ean13,
+            BarCodeScanner.Constants.BarCodeType.code128,
+          ];
+
           const barcodeScannerResult = await BarCodeScanner.scanFromURLAsync(
-            imagePickerResult.uri
+            imagePickerResult.uri,
+            allowedCodes
           );
 
           if (barcodeScannerResult.length === 1) {
             const code = barcodeScannerResult[0];
-            setCode(code.data);
+            if (allowedCodes.indexOf(code.type) > 0) {
+              setCode(code.data);
+            } else {
+              console.warn(`Sorry, ${code.type} is not supported`);
+            }
           } else {
             console.warn("Error, got too many items from barcodescanner.");
           }
@@ -179,10 +188,7 @@ const EditBarcode = ({ route }: { route: any }) => {
             <Text category="c1" appearance="hint" style={style.label}>
               Color
             </Text>
-            <Colorpicker
-              value={color}
-              onSelect={(color) => setColor(color)}
-            />
+            <Colorpicker value={color} onSelect={(color) => setColor(color)} />
           </Fieldset>
 
           <Fieldset>
@@ -226,19 +232,25 @@ const EditBarcode = ({ route }: { route: any }) => {
             )}
 
             {inputType === INPUT_TYPE.FILE && (
-              <Button
-                accessoryLeft={<Icons.Open />}
-                status="success"
-                onPress={() => retrieveFromFile()}
-              >
-                <Text>Pick file from gallery</Text>
-              </Button>
+              <>
+                <Input label="Code from file" value={code} disabled />
+                <Button
+                  accessoryLeft={<Icons.Open />}
+                  status="success"
+                  onPress={() => retrieveFromFile()}
+                >
+                  <Text>Pick file from gallery</Text>
+                </Button>
+              </>
             )}
 
             {inputType === INPUT_TYPE.CAMERA && (
-              <Button accessoryLeft={<Icons.Camera />} status="success">
-                <Text>Take photo</Text>
-              </Button>
+              <>
+                <Input label="Code from camera" value={code} disabled />
+                <Button accessoryLeft={<Icons.Camera />} status="success">
+                  <Text>Take photo</Text>
+                </Button>
+              </>
             )}
           </Fieldset>
 
@@ -250,9 +262,7 @@ const EditBarcode = ({ route }: { route: any }) => {
               onSelect={(index: IndexPath | IndexPath[]) => {
                 setCodeTypeSelectedIndex(index);
                 if (!Array.isArray(index)) {
-                  const type = Object.values(BARCODE_TYPE)[
-                    index.row
-                  ];
+                  const type = Object.values(BARCODE_TYPE)[index.row];
                   setCodeType(type);
                 }
               }}
