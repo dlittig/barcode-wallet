@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import {
   Button,
-  ButtonGroup,
+  Card,
   Datepicker,
   IndexPath,
   Input,
+  Modal,
   Select,
   SelectItem,
   Text,
@@ -43,6 +44,13 @@ enum INPUT_TYPE {
   CAMERA = "INPUT_TYPE_CAMERA",
 }
 
+const ALLOWED_CODES = [
+  BarCodeScanner.Constants.BarCodeType.qr,
+  BarCodeScanner.Constants.BarCodeType.ean8,
+  BarCodeScanner.Constants.BarCodeType.ean13,
+  BarCodeScanner.Constants.BarCodeType.code128,
+];
+
 const EditBarcode = ({ route }: { route: any }) => {
   const barcodeId = route.params ? (route.params["id"] as string) : "";
   const barcode = useSelector((state: RootReducerType) =>
@@ -58,6 +66,7 @@ const EditBarcode = ({ route }: { route: any }) => {
   const [color, setColor] = useState(
     take(barcode, "color", CARD_COLOR.LIGHT_BLUE)
   );
+  const [hasCameraPermission, setCameraPermission] = useState(false);
   const [expires, setExpires] = useState(take(barcode, "expires", false));
   const [expiryDate, setExpiryDate] = useState(
     new Date(take(barcode, "expiryDate", Date.now()))
@@ -75,7 +84,20 @@ const EditBarcode = ({ route }: { route: any }) => {
     take(barcode, "type", BARCODE_TYPE.EAN13)
   );
   const [inputType, setInputType] = useState<string>(INPUT_TYPE.TEXT);
+  const [openModal, setOpenModal] = useState(false);
+  const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
+
+  const requestCameraPermission = async (successCallback: () => void) => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    setCameraPermission(status === "granted");
+
+    if (status !== "granted") {
+      console.warn("Camera permission has not been granted");
+    } else {
+      successCallback();
+    }
+  };
 
   const onSave = () => {
     const barcodeObject: Barcode = {
@@ -114,21 +136,14 @@ const EditBarcode = ({ route }: { route: any }) => {
           options
         );
         if (imagePickerResult && !imagePickerResult.cancelled) {
-          const allowedCodes = [
-            BarCodeScanner.Constants.BarCodeType.qr,
-            BarCodeScanner.Constants.BarCodeType.ean8,
-            BarCodeScanner.Constants.BarCodeType.ean13,
-            BarCodeScanner.Constants.BarCodeType.code128,
-          ];
-
           const barcodeScannerResult = await BarCodeScanner.scanFromURLAsync(
             imagePickerResult.uri,
-            allowedCodes
+            ALLOWED_CODES
           );
 
           if (barcodeScannerResult.length === 1) {
             const code = barcodeScannerResult[0];
-            if (allowedCodes.indexOf(code.type) > 0) {
+            if (ALLOWED_CODES.indexOf(code.type) > 0) {
               setCode(code.data);
             } else {
               console.warn(`Sorry, ${code.type} is not supported`);
@@ -247,9 +262,44 @@ const EditBarcode = ({ route }: { route: any }) => {
             {inputType === INPUT_TYPE.CAMERA && (
               <>
                 <Input label="Code from camera" value={code} disabled />
-                <Button accessoryLeft={<Icons.Camera />} status="success">
+                <Button
+                  accessoryLeft={<Icons.Camera />}
+                  status="success"
+                  onPress={async () => {
+                    await requestCameraPermission(() => {
+                      setScanned(false);
+                      setOpenModal(true);
+                    });
+                  }}
+                >
                   <Text>Take photo</Text>
                 </Button>
+                <Modal
+                  visible={
+                    inputType === INPUT_TYPE.CAMERA &&
+                    openModal &&
+                    hasCameraPermission
+                  }
+                >
+                  <Card disabled={true}>
+                    <BarCodeScanner
+                      style={{ width: 400, height: 400 }}
+                      onBarCodeScanned={
+                        scanned
+                          ? undefined
+                          : ({ type, data }) => {
+                              console.log("Got code", type, data);
+                              if (ALLOWED_CODES.indexOf(type) > 0) {
+                                console.log("setting...");
+                                setOpenModal(false);
+                                setScanned(true);
+                                setCode(data);
+                              }
+                            }
+                      }
+                    />
+                  </Card>
+                </Modal>
               </>
             )}
           </Fieldset>
