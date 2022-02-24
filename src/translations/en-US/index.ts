@@ -28,7 +28,7 @@ export const en_US = {
     },
     screens: {
       barcode: {
-        show: "Show Barcode",
+        scan: "Scan Barcode",
         edit: "Edit barcode",
       },
       recent: "Recent",

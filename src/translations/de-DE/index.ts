@@ -26,6 +26,10 @@ export const de_DE = {
         "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
     },
     screens: {
+      barcode: {
+        scan: "Barcode scannen",
+        edit: "Barcode bearbeiten",
+      },
       location: {
         view: "Ort anschauen",
         edit: "Ort editieren",

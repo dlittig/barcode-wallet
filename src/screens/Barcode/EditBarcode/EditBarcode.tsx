@@ -1,11 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import {
   Button,
-  Card,
   Datepicker,
   IndexPath,
   Input,
-  Modal,
   Select,
   SelectItem,
   Text,
@@ -25,7 +23,7 @@ import { barcodesByIdSelector } from "../../../store/selectors";
 import { Barcode, BARCODE_TYPE } from "../../../store/types";
 import { take } from "../../../utils";
 import * as RNImagePicker from "expo-image-picker";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -37,6 +35,7 @@ import { View } from "react-native";
 import style from "./EditBarcode.style";
 import Fieldset from "../../../components/Fieldset";
 import Colorpicker from "../../../components/Colorpicker";
+import { APP_BARCODE_SCAN } from "../../../components/Navigator/Routes";
 
 enum INPUT_TYPE {
   TEXT = "INPUT_TYPE_TEXT",
@@ -66,7 +65,6 @@ const EditBarcode = ({ route }: { route: any }) => {
   const [color, setColor] = useState(
     take(barcode, "color", CARD_COLOR.LIGHT_BLUE)
   );
-  const [hasCameraPermission, setCameraPermission] = useState(false);
   const [expires, setExpires] = useState(take(barcode, "expires", false));
   const [expiryDate, setExpiryDate] = useState(
     new Date(take(barcode, "expiryDate", Date.now()))
@@ -84,18 +82,23 @@ const EditBarcode = ({ route }: { route: any }) => {
     take(barcode, "type", BARCODE_TYPE.EAN13)
   );
   const [inputType, setInputType] = useState<string>(INPUT_TYPE.TEXT);
-  const [openModal, setOpenModal] = useState(false);
-  const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
 
   const requestCameraPermission = async (successCallback: () => void) => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
-    setCameraPermission(status === "granted");
 
     if (status !== "granted") {
       console.warn("Camera permission has not been granted");
     } else {
       successCallback();
+    }
+  };
+
+  const onDetectCode = ({ type, data }: BarCodeEvent) => {
+    console.log("Got code", type, data);
+    if (ALLOWED_CODES.indexOf(type) > 0) {
+      console.log("setting...");
+      setCode(data);
     }
   };
 
@@ -248,7 +251,12 @@ const EditBarcode = ({ route }: { route: any }) => {
 
             {inputType === INPUT_TYPE.FILE && (
               <>
-                <Input label="Code from file" value={code} disabled />
+                <Input
+                  label="Code from file"
+                  value={code}
+                  disabled
+                  showSoftInputOnFocus={false}
+                />
                 <Button
                   accessoryLeft={<Icons.Open />}
                   status="success"
@@ -261,45 +269,27 @@ const EditBarcode = ({ route }: { route: any }) => {
 
             {inputType === INPUT_TYPE.CAMERA && (
               <>
-                <Input label="Code from camera" value={code} disabled />
+                <Input
+                  label="Code from camera"
+                  value={code}
+                  disabled
+                  showSoftInputOnFocus={false}
+                />
                 <Button
                   accessoryLeft={<Icons.Camera />}
                   status="success"
                   onPress={async () => {
                     await requestCameraPermission(() => {
-                      setScanned(false);
-                      setOpenModal(true);
+                      navigation.navigate(
+                        t(APP_BARCODE_SCAN) as never,
+                        // TODO potentially dangerous. Dont pass functions as params
+                        { onDetectCode } as never
+                      );
                     });
                   }}
                 >
                   <Text>Take photo</Text>
                 </Button>
-                <Modal
-                  visible={
-                    inputType === INPUT_TYPE.CAMERA &&
-                    openModal &&
-                    hasCameraPermission
-                  }
-                >
-                  <Card disabled={true}>
-                    <BarCodeScanner
-                      style={{ width: 400, height: 400 }}
-                      onBarCodeScanned={
-                        scanned
-                          ? undefined
-                          : ({ type, data }) => {
-                              console.log("Got code", type, data);
-                              if (ALLOWED_CODES.indexOf(type) > 0) {
-                                console.log("setting...");
-                                setOpenModal(false);
-                                setScanned(true);
-                                setCode(data);
-                              }
-                            }
-                      }
-                    />
-                  </Card>
-                </Modal>
               </>
             )}
           </Fieldset>
