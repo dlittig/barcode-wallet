@@ -2703,6 +2703,13 @@ expo-barcode-scanner@~11.2.0:
     "@expo/config-plugins" "^4.0.2"
     expo-image-loader "~3.1.0"
 
+expo-brightness@~10.1.0:
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/expo-brightness/-/expo-brightness-10.1.1.tgz#bf9a31e65572b63c10a5df9561c492ec42e3ed35"
+  integrity sha512-cAFEMHwXyxf8KbDz+9d/pr5MoglNiMILGHbZ6hmVapwiyWp/bTCEL0P6PaFpVcI2vXRnDIjWyykqL3KJWKy0bw==
+  dependencies:
+    "@expo/config-plugins" "^4.0.2"
+
 expo-constants@~13.0.2:
   version "13.0.2"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.0.2.tgz#b489ecd575cc82a9a0b3dfbf2385d45a44300eb1"

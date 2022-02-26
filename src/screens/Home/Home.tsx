@@ -6,7 +6,7 @@ import {
   Card as UIKittenCard,
 } from "@ui-kitten/components";
 import { useFonts } from "expo-font";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -27,6 +27,7 @@ import {
 } from "../../store/selectors";
 import { BARCODE_TYPE } from "../../store/types";
 import { humanReadableDate, humanReadableTime } from "../../utils";
+import * as Brightness from "expo-brightness";
 import style from "./Home.style";
 
 type ModalContentComponentType = {
@@ -51,8 +52,21 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
   const barcode = useSelector((state: RootReducerType) =>
     barcodesByIdSelector(state, id)
   );
+  const brightness = useRef<number | undefined>();
 
-  console.log("type is", barcode.type);
+  useLayoutEffect(() => {
+    (async () => {
+      const currentBrightness = await Brightness.getBrightnessAsync();
+      brightness.current = currentBrightness;
+      console.log(brightness.current);
+      Brightness.setBrightnessAsync(1);
+    })();
+
+    return () => {
+      console.log(brightness.current);
+      brightness.current && Brightness.setBrightnessAsync(brightness.current);
+    };
+  }, []);
 
   return (
     <>
