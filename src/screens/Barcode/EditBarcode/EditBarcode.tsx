@@ -109,6 +109,7 @@ const EditBarcode = ({ route }: { route: any }) => {
       description,
       color,
       code,
+      used: false,
       expires,
       expiryDate: expiryDate.getTime(),
       type: codeType,

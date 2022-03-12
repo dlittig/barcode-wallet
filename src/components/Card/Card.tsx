@@ -11,13 +11,15 @@ import style from "./Card.style";
 const Card: FC<CardComponentType> = ({
   id,
   name,
+  isUsed,
   description,
   color,
   onOpen,
   onEdit,
+  onUsed,
 }) => (
   <UIKittenCard
-    footer={() => <Footer onOpen={onOpen} onEdit={onEdit} />}
+    footer={() => <Footer onOpen={onOpen} onEdit={onEdit} onUsed={onUsed} isUsed={isUsed} />}
     style={style.card}
     status={color}
   >

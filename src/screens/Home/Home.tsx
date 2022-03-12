@@ -9,10 +9,9 @@ import { useFonts } from "expo-font";
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Barcode from "../../components/Barcode";
 
-import BaseLayout from "../../components/BaseLayout";
 import Card from "../../components/Card/Card";
 import Icons from "../../components/Icons";
 import List from "../../components/List";
@@ -22,13 +21,15 @@ import { APP_BARCODE_EDIT } from "../../components/Navigator/Routes";
 import Qrcode from "../../components/Qrcode";
 import { RootReducerType } from "../../store/reducers";
 import {
-  barcodesAllSelector,
+  barcodesAllSortedUnusedAndValidSelector,
+  barcodesAllSortedUsedOrExpiredSelector,
   barcodesByIdSelector,
 } from "../../store/selectors";
 import { BARCODE_TYPE } from "../../store/types";
 import { humanReadableDate, humanReadableTime } from "../../utils";
 import * as Brightness from "expo-brightness";
 import style from "./Home.style";
+import { updateBarcode } from "../../store/actions/barcodeActions";
 
 type ModalContentComponentType = {
   id: string;
@@ -121,10 +122,12 @@ const Home: FC = () => {
   const [loaded] = useFonts({
     "Lobster-Regular": require("../../fonts/Lobster-Regular.ttf"),
   });
-  const { t } = useTranslation();
-  const barcodes = useSelector(barcodesAllSelector);
-  const navigation = useNavigation();
+  const validBarcodes = useSelector(barcodesAllSortedUnusedAndValidSelector);
+  const invalidBarcodes = useSelector(barcodesAllSortedUsedOrExpiredSelector);
   const [id, setId] = useState<string>("");
+  const navigation = useNavigation();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const onClose = () => setId("");
 
@@ -134,11 +137,12 @@ const Home: FC = () => {
         <>
           <TopBar />
           <List level="2" spacer>
-            {barcodes.map((barcode, index) => (
+            {validBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
                 id={barcode.id}
                 name={barcode.name}
+                isUsed={barcode.used}
                 color={barcode.color}
                 description={barcode.description}
                 onEdit={() =>
@@ -148,6 +152,48 @@ const Home: FC = () => {
                   )
                 }
                 onOpen={() => setId(barcode.id)}
+                onUsed={() =>
+                  dispatch(
+                    updateBarcode({
+                      ...barcode,
+                      used: true,
+                    })
+                  )
+                }
+              />
+            ))}
+
+            {invalidBarcodes.length > 0 && (
+              <View style={style.divider}>
+                <Text category="c1" appearance="hint" style={style.dividerText}>
+                  Used or expired
+                </Text>
+              </View>
+            )}
+
+            {invalidBarcodes.map((barcode, index) => (
+              <Card
+                key={`barcode-card-${index}`}
+                id={barcode.id}
+                name={barcode.name}
+                isUsed={barcode.used}
+                color={barcode.color}
+                description={barcode.description}
+                onEdit={() =>
+                  navigation.navigate(
+                    t(APP_BARCODE_EDIT) as never,
+                    { id: barcode.id } as never
+                  )
+                }
+                onOpen={() => setId(barcode.id)}
+                onUsed={() =>
+                  dispatch(
+                    updateBarcode({
+                      ...barcode,
+                      used: false,
+                    })
+                  )
+                }
               />
             ))}
           </List>

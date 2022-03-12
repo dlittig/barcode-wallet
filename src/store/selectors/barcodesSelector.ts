@@ -23,6 +23,48 @@ export const barcodesAllSortedSelector = createCachedSelector(
     )
 )((_state_) => "barcodes.sortedBarcodes");
 
+export const barcodesAllSortedUnusedAndValidSelector = createCachedSelector(
+  barcodesAllSelector,
+  (barcodes) =>
+    barcodes.filter((barcode) => {
+      if (barcode.used === false) {
+        if (barcode.expires) {
+          const now = Date.now();
+          if (barcode.expiryDate > now) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      return false;
+    })
+)((_state_) => "barcodes.sortedUnusedOrValidBarcodes");
+
+export const barcodesAllSortedUsedOrExpiredSelector = createCachedSelector(
+  barcodesAllSelector,
+  (barcodes) =>
+    barcodes.filter((barcode) => {
+      if (barcode.used === true) {
+        return true;
+      }
+
+      if (barcode.expires) {
+        const now = Date.now();
+        if (barcode.expiryDate <= now) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      return false;
+    })
+)((_state_) => "barcodes.sortedUserOrExpiredBarcodes");
+
 export const barcodesByIdSelector = createCachedSelector(
   barcodesSelector,
   barcodeId,

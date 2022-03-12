@@ -9,6 +9,7 @@ const Icons = {
   Close: (props: any) => <Icon {...props} name="close-circle" />,
   CreditCard: (props: any) => <Icon {...props} name="credit-card-outline" />,
   Delete: (props: any) => <Icon {...props} name="trash-2-outline" />,
+  Done: (props: any) => <Icon {...props} name="done-all-outline" />,
   Edit: (props: any) => <Icon {...props} name="edit-2-outline" />,
   Grant: (props: any) => <Icon {...props} name="shield-outline" />,
   Heart: (props: any) => <Icon {...props} name="heart-outline" />,
