@@ -95,9 +95,7 @@ const EditBarcode = ({ route }: { route: any }) => {
   };
 
   const onDetectCode = ({ type, data }: BarCodeEvent) => {
-    console.log("Got code", type, data);
     if (ALLOWED_CODES.indexOf(type) > 0) {
-      console.log("setting...");
       setCode(data);
     }
   };

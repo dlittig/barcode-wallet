@@ -59,12 +59,10 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
     (async () => {
       const currentBrightness = await Brightness.getBrightnessAsync();
       brightness.current = currentBrightness;
-      console.log(brightness.current);
       Brightness.setBrightnessAsync(1);
     })();
 
     return () => {
-      console.log(brightness.current);
       brightness.current && Brightness.setBrightnessAsync(brightness.current);
     };
   }, []);

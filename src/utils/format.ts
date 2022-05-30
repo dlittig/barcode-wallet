@@ -10,6 +10,13 @@ export const humanReadableTime = (time: number): string => {
   return `${padd(date.getHours())}:${padd(date.getMinutes())}`;
 };
 
+export const backupTimestamp = (time: number): string => {
+  const date: Date = new Date(time);
+  return `${date.getFullYear()}-${padd(date.getMonth() + 1)}-${padd(
+    date.getDate()
+  )}_${padd(date.getHours())}-${padd(date.getMinutes())}`;
+};
+
 export const humanReadableMoney = (value: number, unit: string): string => {
   // Convert value to string and figure out present decimal places
   const valueString = `${value}`;

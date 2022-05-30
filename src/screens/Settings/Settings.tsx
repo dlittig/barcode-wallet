@@ -1,19 +1,19 @@
 import React, { Dispatch } from "react";
 
-import { useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { TFunction, useTranslation } from "react-i18next";
 import { Button, Divider, List, ListItem } from "@ui-kitten/components";
 
-import {
-  requestImagePickerPermission,
-  showToast,
-} from "../../utils";
+import { requestImagePickerPermission, showToast } from "../../utils";
 import pack from "../../../package.json";
 import { SettingsEntryType } from "./types";
-import { setSeenIntro } from "../../store/actions";
 import BaseLayout from "../../components/BaseLayout/BaseLayout";
 import BackBar from "../../components/Navigator/Bars/BackBar/BackBar";
 import { resetState } from "../../store/actions/commonActions";
+import { barcodesSelector } from "../../store/selectors";
+import { createBackup, readBackup } from "../../utils/backup";
+import { Alert } from "react-native";
+import { readFromBackup } from "../../store/actions/barcodeActions";
 
 const renderItem =
   (dispatch: Dispatch<any>) =>
@@ -38,7 +38,34 @@ const renderItem =
       />
     );
 
+const confirmOverwrite = (t: TFunction<"translate", undefined>, dispatch: Dispatch<any>) =>
+  Alert.alert(
+    "Warning",
+    "When you import data from a backup, all currently saved data will be overriden!",
+    [
+      {
+        text: "Cancel",
+        onPress: () => undefined,
+        style: "cancel",
+      },
+      {
+        text: "Accept",
+        onPress: async () => {
+          const backup = await readBackup();
+          if (backup) {
+            dispatch(readFromBackup(backup.payload));
+            showToast(`Backup successfully read`);
+          } else {
+            showToast(`Failed to read backup`);
+          }
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+
 const Settings = () => {
+  const barcodesData = useSelector(barcodesSelector);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const settingsEntries: SettingsEntryType[] = [
@@ -60,6 +87,26 @@ const Settings = () => {
           requestImagePickerPermission();
         },
         label: t("actions.grantPermission"),
+      },
+    },
+    {
+      title: "Import",
+      description: "Import data from file system",
+      button: {
+        onPress: () => () => {
+          confirmOverwrite(t, dispatch);
+        },
+        label: "Select file",
+      },
+    },
+    {
+      title: "Export",
+      description: "Save your data to file",
+      button: {
+        onPress: () => () => {
+          createBackup(barcodesData);
+        },
+        label: "Create",
       },
     },
   ];

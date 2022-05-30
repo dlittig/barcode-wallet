@@ -15,8 +15,6 @@ const ScanBarcode: FC<ScanBarcodeComponentType> = ({ route }) => {
   const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
 
-  console.log(route);
-
   const onResult = (event: BarCodeEvent) => {
     setScanned(true);
     onDetectCode(event);

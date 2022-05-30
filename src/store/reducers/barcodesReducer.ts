@@ -3,7 +3,8 @@ import { COMMON_RESET_STATE } from "../constants/commonConstants";
 import {
   BARCODE_ADD,
   BARCODE_DELETE,
-  BARCODE_UPDATE
+  BARCODE_READ_FROM_BACKUP,
+  BARCODE_UPDATE,
 } from "../constants/barcodeConstants";
 import { Barcode, BarcodeState } from "../types";
 
@@ -57,6 +58,8 @@ export const barcodesReducer = (
       delete newState.barcodes.byId[barcode.id];
 
       return newState;
+    case BARCODE_READ_FROM_BACKUP:
+      return action.payload;
     case COMMON_RESET_STATE:
       return initialState;
     default:

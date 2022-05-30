@@ -2,7 +2,7 @@ import createCachedSelector from "re-reselect";
 import { RootReducerType } from "../reducers";
 import { BarcodeState } from "../types";
 
-const barcodesSelector = (state: RootReducerType): BarcodeState =>
+export const barcodesSelector = (state: RootReducerType): BarcodeState =>
   state.barcodesReducer;
 
 const barcodeId = (state: RootReducerType, id: string): string => id;
