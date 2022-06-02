@@ -21,7 +21,7 @@ import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
 import { RootReducerType } from "../../../store/reducers";
 import { barcodesByIdSelector } from "../../../store/selectors";
 import { Barcode, BARCODE_TYPE } from "../../../store/types";
-import { take } from "../../../utils";
+import { requestImagePickerMediaPermission, take } from "../../../utils";
 import * as RNImagePicker from "expo-image-picker";
 import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 
@@ -125,9 +125,8 @@ const EditBarcode = ({ route }: { route: any }) => {
 
   const retrieveFromFile = async () => {
     try {
-      const { status } =
-        await RNImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status === "granted") {
+      const granted = await requestImagePickerMediaPermission();
+      if (granted) {
         const options: RNImagePicker.ImagePickerOptions = {
           allowsMultipleSelection: false,
           quality: 1,

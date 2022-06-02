@@ -74,8 +74,12 @@ export const en_US = {
           description: "Built with ❤️ by dlittig",
         },
         mediaPermission: {
-          title: "Permission",
-          description: "Grant media permission",
+          title: "Grant media permission",
+          description: "Used to read codes from photos in your gallery",
+        },
+        cameraPermission: {
+          title: "Grant camera permission",
+          description: "Used to scan codes with your camera",
         },
       },
       intro: {

@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { TFunction, useTranslation } from "react-i18next";
 import { Button, Divider, List, ListItem } from "@ui-kitten/components";
 
-import { requestImagePickerPermission, showToast } from "../../utils";
+import {
+  requestImagePickerCameraPermission,
+  requestImagePickerMediaPermission,
+  showToast,
+} from "../../utils";
 import pack from "../../../package.json";
 import { SettingsEntryType } from "./types";
 import BaseLayout from "../../components/BaseLayout/BaseLayout";
@@ -38,7 +42,10 @@ const renderItem =
       />
     );
 
-const confirmOverwrite = (t: TFunction<"translate", undefined>, dispatch: Dispatch<any>) =>
+const confirmOverwrite = (
+  t: TFunction<"translate", undefined>,
+  dispatch: Dispatch<any>
+) =>
   Alert.alert(
     "Warning",
     "When you import data from a backup, all currently saved data will be overriden!",
@@ -68,6 +75,7 @@ const Settings = () => {
   const barcodesData = useSelector(barcodesSelector);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
   const settingsEntries: SettingsEntryType[] = [
     {
       title: t("text.settings.about.title"),
@@ -83,8 +91,28 @@ const Settings = () => {
       title: t("text.settings.mediaPermission.title"),
       description: t("text.settings.mediaPermission.description"),
       button: {
-        onPress: () => () => {
-          requestImagePickerPermission();
+        onPress: () => async () => {
+          const granted = await requestImagePickerMediaPermission();
+          if (granted) {
+            showToast("Permission successfully granted");
+          } else {
+            showToast("Failed to grant permission");
+          }
+        },
+        label: t("actions.grantPermission"),
+      },
+    },
+    {
+      title: t("text.settings.cameraPermission.title"),
+      description: t("text.settings.cameraPermission.description"),
+      button: {
+        onPress: () => async () => {
+          const granted = await requestImagePickerCameraPermission();
+          if (granted) {
+            showToast("Permission successfully granted");
+          } else {
+            showToast("Failed to grant permission");
+          }
         },
         label: t("actions.grantPermission"),
       },
