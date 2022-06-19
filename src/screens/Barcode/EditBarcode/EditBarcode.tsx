@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import {
   Button,
   Datepicker,
@@ -9,33 +8,38 @@ import {
   Text,
   Toggle,
 } from "@ui-kitten/components";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import BaseLayout from "../../../components/BaseLayout";
-import { CARD_COLOR } from "../../../components/Card/Card";
-import Icons from "../../../components/Icons";
-import List from "../../../components/List";
-import MainAction from "../../../components/MainAction";
-import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
-import { RootReducerType } from "../../../store/reducers";
-import { barcodesByIdSelector } from "../../../store/selectors";
-import { Barcode, BARCODE_TYPE } from "../../../store/types";
-import { requestImagePickerMediaPermission, take } from "../../../utils";
-import * as RNImagePicker from "expo-image-picker";
-import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
-
+import { useState } from "react";
+import { View } from "react-native";
 import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "react-i18next";
+import * as RNImagePicker from "expo-image-picker";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import {
+  BarCodeEvent,
+  BarCodeScanner,
+  BarCodeScannerResult,
+} from "expo-barcode-scanner";
+
 import {
   addBarcode,
   updateBarcode,
 } from "../../../store/actions/barcodeActions";
-import { View } from "react-native";
+import List from "../../../components/List";
+import Icons from "../../../components/Icons";
+import Fieldset from "../../../components/Fieldset";
+import MainAction from "../../../components/MainAction";
+import BaseLayout from "../../../components/BaseLayout";
+import { RootReducerType } from "../../../store/reducers";
+import Colorpicker from "../../../components/Colorpicker";
+import { CARD_COLOR } from "../../../components/Card/Card";
+import { Barcode, BARCODE_TYPE } from "../../../store/types";
+import { barcodesByIdSelector } from "../../../store/selectors";
+import { APP_BARCODE_SCAN } from "../../../components/Navigator/Routes";
+import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
+import { requestImagePickerMediaPermission, take } from "../../../utils";
 
 import style from "./EditBarcode.style";
-import Fieldset from "../../../components/Fieldset";
-import Colorpicker from "../../../components/Colorpicker";
-import { APP_BARCODE_SCAN } from "../../../components/Navigator/Routes";
 
 enum INPUT_TYPE {
   TEXT = "INPUT_TYPE_TEXT",
@@ -78,7 +82,7 @@ const EditBarcode = ({ route }: { route: any }) => {
       )
     )
   );
-  const [codeType, setCodeType] = useState<string>(
+  const [codeType, setCodeType] = useState<keyof typeof BARCODE_TYPE>(
     take(barcode, "type", BARCODE_TYPE.EAN13)
   );
   const [inputType, setInputType] = useState<string>(INPUT_TYPE.TEXT);
@@ -94,9 +98,33 @@ const EditBarcode = ({ route }: { route: any }) => {
     }
   };
 
+  const setCodeTypeFromExpoBarcodeScannerResult = (
+    scannerResult: BarCodeScannerResult
+  ) => {
+    switch (scannerResult.type) {
+      case BarCodeScanner.Constants.BarCodeType.qr:
+        setCodeType(BARCODE_TYPE.QR);
+        return;
+      case BarCodeScanner.Constants.BarCodeType.ean8:
+        setCodeType(BARCODE_TYPE.EAN8);
+        return;
+      case BarCodeScanner.Constants.BarCodeType.ean13:
+        setCodeType(BARCODE_TYPE.EAN13);
+        return;
+      case BarCodeScanner.Constants.BarCodeType.code128:
+        setCodeType(BARCODE_TYPE.CODE128);
+        return;
+      default:
+        return;
+    }
+  };
+
   const onDetectCode = ({ type, data }: BarCodeEvent) => {
     if (ALLOWED_CODES.indexOf(type) > 0) {
       setCode(data);
+      setCodeTypeFromExpoBarcodeScannerResult({ type, data });
+    } else {
+      console.warn(`Sorry, ${type} is not supported`);
     }
   };
 
@@ -146,6 +174,7 @@ const EditBarcode = ({ route }: { route: any }) => {
             const code = barcodeScannerResult[0];
             if (ALLOWED_CODES.indexOf(code.type) > 0) {
               setCode(code.data);
+              setCodeTypeFromExpoBarcodeScannerResult(code);
             } else {
               console.warn(`Sorry, ${code.type} is not supported`);
             }

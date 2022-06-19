@@ -3,14 +3,14 @@ export const BARCODE_TYPE = {
   EAN13: "EAN13",
   EAN8: "EAN8",
   CODE128: "CODE128",
-};
+} as const;
 
 export type Barcode = {
   id: string;
   name: string;
   description: string;
   color: string;
-  type: string;
+  type: keyof typeof BARCODE_TYPE;
   time: number;
   code: string;
   expires: boolean;

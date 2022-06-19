@@ -1,12 +1,10 @@
+import { View } from "react-native";
 import { FC, useState } from "react";
-
 import { useNavigation } from "@react-navigation/native";
 import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 
-import BaseLayout from "../../../components/BaseLayout";
 import BackBar from "../../../components/Navigator/Bars/BackBar";
 import { ScanBarcodeComponentType, DetectCodeCallback } from "./types";
-import { View } from "react-native";
 
 const ScanBarcode: FC<ScanBarcodeComponentType> = ({ route }) => {
   const onDetectCode: DetectCodeCallback = route.params
