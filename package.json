@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.1",
+    "@expo-google-fonts/lobster": "^0.2.2",
     "@react-native-masked-view/masked-view": "0.2.6",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
@@ -21,7 +22,7 @@
     "expo-brightness": "~10.2.0",
     "expo-document-picker": "~10.2.1",
     "expo-file-system": "~14.0.0",
-    "expo-font": "~10.1.0",
+    "expo-font": "^10.1.0",
     "expo-image-picker": "~13.1.1",
     "expo-localization": "~13.0.0",
     "expo-sharing": "~10.2.0",

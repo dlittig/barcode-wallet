@@ -5,7 +5,7 @@ import {
   Text,
   Card as UIKittenCard,
 } from "@ui-kitten/components";
-import { useFonts } from "expo-font";
+import { Lobster_400Regular, useFonts } from "@expo-google-fonts/lobster";
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -119,7 +119,7 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
 
 const Home: FC = () => {
   const [loaded] = useFonts({
-    "Lobster-Regular": require("../../fonts/Lobster-Regular.ttf"),
+    "Lobster-Regular": Lobster_400Regular,
   });
   const validBarcodes = useSelector(barcodesAllSortedUnusedAndValidSelector);
   const invalidBarcodes = useSelector(barcodesAllSortedUsedOrExpiredSelector);
