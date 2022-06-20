@@ -129,6 +129,10 @@ const EditBarcode = ({ route }: { route: any }) => {
   };
 
   const onSave = () => {
+    if (name.length === 0 || description.length === 0) {
+      console.warn("Not all necessary fields are containing values.");
+    }
+    
     const barcodeObject: Barcode = {
       id: take(barcode, "id", uuidv4()),
       name,
