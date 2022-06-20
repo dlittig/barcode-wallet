@@ -92,7 +92,7 @@ const EditBarcode = ({ route }: { route: any }) => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
 
     if (status !== "granted") {
-      console.warn("Camera permission has not been granted");
+      console.warn(t("toasts.permissions.camera.notGranted"));
     } else {
       successCallback();
     }
@@ -124,15 +124,16 @@ const EditBarcode = ({ route }: { route: any }) => {
       setCode(data);
       setCodeTypeFromExpoBarcodeScannerResult({ type, data });
     } else {
-      console.warn(`Sorry, ${type} is not supported`);
+      console.warn(t("toasts.messages.typeNotSupported", { type }));
     }
   };
 
   const onSave = () => {
     if (name.length === 0 || description.length === 0) {
-      console.warn("Not all necessary fields are containing values.");
+      console.warn(t("toasts.messages.barcodeValidationFailed"));
+      return;
     }
-    
+
     const barcodeObject: Barcode = {
       id: take(barcode, "id", uuidv4()),
       name,
@@ -180,10 +181,12 @@ const EditBarcode = ({ route }: { route: any }) => {
               setCode(code.data);
               setCodeTypeFromExpoBarcodeScannerResult(code);
             } else {
-              console.warn(`Sorry, ${code.type} is not supported`);
+              console.warn(
+                t("toasts.messages.typeNotSupported", { type: code.type })
+              );
             }
           } else {
-            console.warn("Error, got too many items from barcodescanner.");
+            console.warn(t("toasts.messages.tooManybarcodes"));
           }
         }
       }
@@ -199,7 +202,7 @@ const EditBarcode = ({ route }: { route: any }) => {
         <List level="1" spacer padding>
           <Fieldset>
             <Input
-              label={t("text.location.name") as string}
+              label={t("text.editBarcode.name") as string}
               value={name}
               onChangeText={(nextValue) => setName(nextValue)}
             />
@@ -207,7 +210,7 @@ const EditBarcode = ({ route }: { route: any }) => {
 
           <Fieldset>
             <Input
-              label={"Description"}
+              label={t("text.editBarcode.description") as string}
               value={description}
               onChangeText={(nextValue) => setDescription(nextValue)}
             />
@@ -215,7 +218,7 @@ const EditBarcode = ({ route }: { route: any }) => {
 
           <Fieldset>
             <Text category="c1" appearance="hint" style={style.label}>
-              Expires
+              {t("text.editBarcode.expires") as string}
             </Text>
             <View style={style.expiryContainer}>
               <Datepicker
@@ -235,14 +238,14 @@ const EditBarcode = ({ route }: { route: any }) => {
 
           <Fieldset>
             <Text category="c1" appearance="hint" style={style.label}>
-              Color
+              {t("text.editBarcode.color") as string}
             </Text>
             <Colorpicker value={color} onSelect={(color) => setColor(color)} />
           </Fieldset>
 
           <Fieldset>
             <Text category="c1" appearance="hint" style={style.label}>
-              Code
+              {t("text.editBarcode.code") as string}
             </Text>
             <View style={style.inputTypeGroup}>
               <Button
@@ -251,7 +254,7 @@ const EditBarcode = ({ route }: { route: any }) => {
                   inputType === INPUT_TYPE.TEXT ? "filled" : "outline"
                 }
               >
-                Text
+                {t("text.editBarcode.text") as string}
               </Button>
               <Button
                 style={style.middleButton}
@@ -260,7 +263,7 @@ const EditBarcode = ({ route }: { route: any }) => {
                   inputType === INPUT_TYPE.FILE ? "filled" : "outline"
                 }
               >
-                File
+                {t("text.editBarcode.file") as string}
               </Button>
               <Button
                 onPress={() => setInputType(INPUT_TYPE.CAMERA)}
@@ -268,13 +271,13 @@ const EditBarcode = ({ route }: { route: any }) => {
                   inputType === INPUT_TYPE.CAMERA ? "filled" : "outline"
                 }
               >
-                Camera
+                {t("text.editBarcode.camera") as string}
               </Button>
             </View>
 
             {inputType === INPUT_TYPE.TEXT && (
               <Input
-                label="Enter code"
+                label={t("text.editBarcode.enterCode")}
                 value={code}
                 onChangeText={(nextValue) => setCode(nextValue)}
               />
@@ -283,7 +286,7 @@ const EditBarcode = ({ route }: { route: any }) => {
             {inputType === INPUT_TYPE.FILE && (
               <>
                 <Input
-                  label="Code from file"
+                  label={t("text.editBarcode.codeFromFile")}
                   value={code}
                   disabled
                   showSoftInputOnFocus={false}
@@ -293,7 +296,7 @@ const EditBarcode = ({ route }: { route: any }) => {
                   status="success"
                   onPress={() => retrieveFromFile()}
                 >
-                  <Text>Pick file from gallery</Text>
+                  <Text>{t("actions.pickFromGallery")}</Text>
                 </Button>
               </>
             )}
@@ -301,7 +304,7 @@ const EditBarcode = ({ route }: { route: any }) => {
             {inputType === INPUT_TYPE.CAMERA && (
               <>
                 <Input
-                  label="Code from camera"
+                  label={t("text.editBarcode.codeFromCamera")}
                   value={code}
                   disabled
                   showSoftInputOnFocus={false}
@@ -319,7 +322,7 @@ const EditBarcode = ({ route }: { route: any }) => {
                     });
                   }}
                 >
-                  <Text>Take photo</Text>
+                  <Text>{t("actions.takePhoto")}</Text>
                 </Button>
               </>
             )}
@@ -327,7 +330,7 @@ const EditBarcode = ({ route }: { route: any }) => {
 
           <Fieldset>
             <Select
-              label="Type"
+              label={t("text.editBarcode.type") as string}
               value={codeType}
               selectedIndex={selectedCodeTypeIndex}
               onSelect={(index: IndexPath | IndexPath[]) => {

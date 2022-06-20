@@ -1,45 +1,31 @@
 export const de_DE = {
   translation: {
     actions: {
-      leave: "Verlassen",
-      stay: "Bleiben",
-      addPhotos: "Fotos hinzufügen",
-      createNew: "Erstellen",
-      start: "Start",
-      reset: "Zurücksetzen",
-      navigate: "Navigieren",
-      stopParking: "Beenden",
-      startParking: "Auto parken",
-      getLocation: "Orten",
-      previous: "Zurück",
-      next: "Weiter",
-      launch: "Starten!",
-      grantPermission: "Berechtigung erteilen",
+      version: "Version",
+      save: "Speichern",
+      edit: "Ändern",
+      createNew: "Anlegen",
+      reset: "Reset",
+      grantPermission: "Erteilen",
+      use: "Benutzt",
+      unuse: "Ungenutzt",
+      show: "Zeigen",
+      pickFromGallery: "Datei aus Galerie wählen",
+      takePhoto: "Foto machen",
+      selectFile: "Datei wählen",
+      create: "Anlegen",
     },
-    error: {
-      permissions: "Da ist etwas schief gelaufen. Versuche es noch einmal.",
-    },
-    permissions: {},
     empty: {
-      history: `Keine aktiven Elemente vorhanden. Du kannst ein neues Element im "Neuste" Bildschirm anlegen.`,
-      recent:
-        "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
+      home: "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
     },
     screens: {
       barcode: {
         scan: "Barcode scannen",
         edit: "Barcode bearbeiten",
       },
-      location: {
-        view: "Ort anschauen",
-        edit: "Ort editieren",
-      },
-      recent: "Neueste",
-      history: "Verlauf",
-      map: "Karte",
       settings: "Einstellungen",
       about: "Über",
-      app: "Ey, wo ist mein Auto?",
+      app: "BarcodeWallet",
     },
     dialogs: {
       leave: {
@@ -48,64 +34,66 @@ export const de_DE = {
           "Es könnten nicht gespeicherte Änderungen vorhanden sein. Seite wirklich verlassen?",
       },
     },
-    toasts: {},
-    banner: {},
+    toasts: {
+      permissions: {
+        camera: {
+          notGranted: "Kamera-Berechtigung konnte nicht erteilt werden",
+          successfullyGranted: "Berechtigung erfolgreich erteilt",
+          failedToGrant: "Berechtigung konnte nicht erteilt werden",
+        },
+        media: {
+          successfullyGranted: "Berechtigung erfolgreich erteilt",
+          failedToGrant: "Berechtigung konnte nicht erteilt werden",
+        },
+      },
+      messages: {
+        typeNotSupported: "Verzeihung, {{type}} wird nicht unterstützt",
+        barcodeValidationFailed:
+          "Nicht alle notwendigen Felder enthalten Werte.",
+        tooManybarcodes: "Zu viele Codes erkannt. Bitte nur einen Barcode scannen.",
+      },
+    },
     text: {
-      location: {
+      editBarcode: {
+        enterCode: "Code eingeben",
+        codeFromFile: "Code von Datei",
+        codeFromCamera: "Code von Kamera",
         name: "Name",
-        setReminder: "Erinnerung erstellen",
-        reminderDate: "Erinnerungsdatum",
-        hours: "Stunden",
-        minutes: "Minuten",
-        paid: "Bezahlt",
-        unit: "Einheit",
-        notes: "Notizen",
-        parked: "Geparkt",
-        reminder: "Erinnerung",
-        photos: "Fotos",
-        photosHint:
-          "Du kannst das Foto in voller Größe betrachten, wenn Du es berührst.",
+        description: "Beschreibung",
+        expires: "Läuft ab",
+        color: "Farbe",
+        code: "Code",
+        type: "Typ",
+        text: "Text",
+        file: "Datei",
+        camera: "Kamera",
+      },
+      home: {
+        addedOn: "Hinzugefügt am",
+        usedOrExpired: "Benutzt oder abgelaufen",
+        expiresOn: "Läuft ab am",
       },
       settings: {
-        intro: {
-          title: "Einleitung",
-          description: "Zeige den Einleitungsbildschirm erneut",
-        },
         about: {
           title: "Über",
           description: "Mit ❤️ entwickelt von dlittig",
         },
         mediaPermission: {
-          title: "Berechtigung",
-          description: "Medienberechtigung erteilen",
-        },
-      },
-      intro: {
-        description: {
-          title: `Willkommen zu "Ey, wo ist mein Auto?"`,
-          description:
-            "Mit dieser App kannst Du protokollieren wo Du dein Auto geparkt hast, zu diesem Ort navigieren und eine Benachrichtigung erhalten, wenn dein Parkticket davor ist abzulaufen.",
-        },
-        location: {
-          title: "Standortberechtigung",
-          description:
-            "Wir benötigen diese Berechtigung nur um einmalig die Position deines geparkten Autos zu erfassen. Der Standort wird nicht anderweitig verwendet.",
-        },
-        notification: {
-          title: "Benachrichtigungsberechtigung",
-          description:
-            "Wir benötigen diese Berechtigung damit wir Dich über ein ablaufendes Parkticket informieren können.",
-        },
-        media: {
           title: "Medienberechtigung",
           description:
-            "Wir benötigen diese Berechtigung, damit Du Fotos zu einer Parkung hinzufügen kannst.",
-          hint: "Du kannst diese Berechtigung auch später in den Einstellungen erteilen.",
+            "Wird benötigt, damit Bilder aus der Galerie ausgewählt werden können",
         },
-        launch: {
-          title: "Großartig!",
-          description:
-            "Du kannst diese App jetzt nutzen und deine Parkungen hier ablegen!",
+        cameraPermission: {
+          title: "Kamera-Berechtigung",
+          description: "Wird benötigt, damit Barcodes gescannt werden können",
+        },
+        import: {
+          title: "Import",
+          description: "Importiere Daten vom Dateisystem",
+        },
+        export: {
+          title: "Export",
+          description: "Daten in einer Datei speichern",
         },
       },
     },

@@ -50,6 +50,7 @@ const modalStyle = StyleSheet.create({
 });
 
 const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
+  const { t } = useTranslation();
   const barcode = useSelector((state: RootReducerType) =>
     barcodesByIdSelector(state, id)
   );
@@ -83,14 +84,14 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
             <Text category="h5">{barcode.name}</Text>
             <Text category="h6">{barcode.description}</Text>
             <View style={modalStyle.timeInfo}>
-              <Text>Added on:</Text>
+              <Text>{t("text.home.addedOn") as string}:</Text>
               <Text>{`${humanReadableDate(barcode.time)} ${humanReadableTime(
                 barcode.time
               )}`}</Text>
             </View>
             {barcode.expires && (
               <View style={modalStyle.timeInfo}>
-                <Text>Expires on:</Text>
+                <Text>{t("text.home.expiresOn") as string}:</Text>
                 <Text>{`${humanReadableDate(barcode.expiryDate)}`}</Text>
               </View>
             )}
@@ -164,7 +165,7 @@ const Home: FC = () => {
             {invalidBarcodes.length > 0 && (
               <View style={style.divider}>
                 <Text category="c1" appearance="hint" style={style.dividerText}>
-                  Used or expired
+                  {t("text.home.usedOrExpired")}
                 </Text>
               </View>
             )}

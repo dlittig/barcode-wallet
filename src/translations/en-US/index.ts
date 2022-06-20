@@ -2,42 +2,30 @@ export const en_US = {
   translation: {
     actions: {
       version: "Version",
-      addPhotos: "Add photos",
       save: "Save",
       edit: "Edit",
       createNew: "Create new",
-      start: "Start",
       reset: "Reset",
-      navigate: "Navigate",
-      stopParking: "Stop parking",
-      startParking: "Park car",
-      getLocation: "Get location",
-      previous: "Previous",
-      next: "Next",
-      launch: "Launch!",
       grantPermission: "Grant permission",
+      use: "Use",
+      unuse: "Unuse",
+      show: "Show",
+      pickFromGallery: "Pick file from gallery",
+      takePhoto: "Take photo",
+      selectFile: "Select file",
+      create: "Create",
     },
-    error: {
-      permissions: "Something went wrong, please try again.",
-    },
-    permissions: {},
     empty: {
-      history:
-        "No inactive parkings here. You can create one on the Recent screen",
-      recent: "No parking saved. You can create one with the button below",
+      home: "No barcodes saved. You can store one with the button below",
     },
     screens: {
       barcode: {
         scan: "Scan Barcode",
         edit: "Edit barcode",
       },
-      recent: "Recent",
-      history: "History",
-      map: "Map",
-      intro: "Introduction",
       settings: "Settings",
       about: "About",
-      app: "Yo, where is my car?",
+      app: "BarcodeWallet",
     },
     dialogs: {
       leave: {
@@ -46,29 +34,46 @@ export const en_US = {
           "You might have unsaved changes. Are you sure you want to leave the screen?",
       },
     },
-    toasts: {},
-    banner: {},
+    toasts: {
+      permissions: {
+        camera: {
+          notGranted: "Camera permission has not been granted",
+          successfullyGranted: "Permission successfully granted",
+          failedToGrant: "Failed to grant permission",
+        },
+        media: {
+          successfullyGranted: "Permission successfully granted",
+          failedToGrant: "Failed to grant permission",
+        },
+      },
+      messages: {
+        typeNotSupported: "Sorry, {{type}} is not supported",
+        barcodeValidationFailed:
+          "Not all necessary fields are containing values.",
+        tooManybarcodes: "Got too many barcodes. Try to scan only one barcode.",
+      },
+    },
     text: {
-      location: {
+      editBarcode: {
+        enterCode: "Enter code",
+        codeFromFile: "Code from file",
+        codeFromCamera: "Code from camera",
         name: "Name",
-        setReminder: "Set reminder",
-        removeReminder: "Remove reminder",
-        reminderDate: "Reminder date",
-        hours: "Hours",
-        minutes: "Minutes",
-        paid: "Paid",
-        unit: "Unit",
-        notes: "Notes",
-        parked: "Parked",
-        reminder: "Reminder",
-        photos: "Photos",
-        photosHint: "You can see the photos in full size when tapping on them.",
+        description: "Description",
+        expires: "Expires",
+        color: "Color",
+        code: "Code",
+        type: "Type",
+        text: "Text",
+        file: "File",
+        camera: "Camera",
+      },
+      home: {
+        addedOn: "Added on",
+        usedOrExpired: "Used or expired",
+        expiresOn: "Expires on",
       },
       settings: {
-        intro: {
-          title: "Intro",
-          description: "Show the intro screen again",
-        },
         about: {
           title: "About",
           description: "Built with ❤️ by dlittig",
@@ -81,33 +86,13 @@ export const en_US = {
           title: "Grant camera permission",
           description: "Used to scan codes with your camera",
         },
-      },
-      intro: {
-        description: {
-          title: 'Welcome to "Yo, where is my car?"',
-          description:
-            "With this app you can keep track of where you parked your car, remind yourself that a parking ticket is expiring soon and navigate to the parking location.",
+        import: {
+          title: "Import",
+          description: "Import data from file system",
         },
-        location: {
-          title: "Location permission",
-          description:
-            "We need location permission only to acquire your location, when you park your car. It is not used for anything else.",
-        },
-        notification: {
-          title: "Notification permission",
-          description:
-            "We need notification permission to remind you of your expiring parking time.",
-        },
-        media: {
-          title: "Media permission",
-          description:
-            "We need the media permission, so that you can easily add photos to your parking.",
-          hint: "You can grant the permission later in the settings, too.",
-        },
-        launch: {
-          title: "Awesome!",
-          description:
-            "You can now start using the app and save your parkings!",
+        export: {
+          title: "Export",
+          description: "Save your data to file",
         },
       },
     },

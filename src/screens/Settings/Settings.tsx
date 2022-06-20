@@ -94,9 +94,9 @@ const Settings = () => {
         onPress: () => async () => {
           const granted = await requestImagePickerMediaPermission();
           if (granted) {
-            showToast("Permission successfully granted");
+            showToast(t("toasts.permissions.media.successfullyGranted"));
           } else {
-            showToast("Failed to grant permission");
+            showToast(t("toasts.permissions.media.failedToGrant"));
           }
         },
         label: t("actions.grantPermission"),
@@ -109,32 +109,32 @@ const Settings = () => {
         onPress: () => async () => {
           const granted = await requestImagePickerCameraPermission();
           if (granted) {
-            showToast("Permission successfully granted");
+            showToast(t("toasts.permissions.camera.successfullyGranted"));
           } else {
-            showToast("Failed to grant permission");
+            showToast(t("toasts.permissions.camera.failedToGrant"));
           }
         },
         label: t("actions.grantPermission"),
       },
     },
     {
-      title: "Import",
-      description: "Import data from file system",
+      title: t("text.settings.import.title"),
+      description: t("text.settings.import.description"),
       button: {
         onPress: () => () => {
           confirmOverwrite(t, dispatch);
         },
-        label: "Select file",
+        label: t("actions.selectFile"),
       },
     },
     {
-      title: "Export",
-      description: "Save your data to file",
+      title: t("text.settings.export.title"),
+      description: t("text.settings.export.description"),
       button: {
         onPress: () => () => {
           createBackup(barcodesData);
         },
-        label: "Create",
+        label: t("actions.create"),
       },
     },
   ];
