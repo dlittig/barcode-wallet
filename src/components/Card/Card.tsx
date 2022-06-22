@@ -17,9 +17,13 @@ const Card: FC<CardComponentType> = ({
   onOpen,
   onEdit,
   onUsed,
+  onDelete,
 }) => (
   <UIKittenCard
-    footer={() => <Footer onOpen={onOpen} onEdit={onEdit} onUsed={onUsed} isUsed={isUsed} />}
+    footer={() => (
+      <Footer onOpen={onOpen} onEdit={onEdit} onUsed={onUsed} isUsed={isUsed} />
+    )}
+    onLongPress={onDelete}
     style={style.card}
     status={color}
   >

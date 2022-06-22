@@ -14,6 +14,8 @@ export const de_DE = {
       takePhoto: "Foto machen",
       selectFile: "Datei wählen",
       create: "Anlegen",
+      accept: "Okay",
+      cancel: "Abbrechen",
     },
     empty: {
       home: "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
@@ -28,6 +30,11 @@ export const de_DE = {
       app: "BarcodeWallet",
     },
     dialogs: {
+      delete_barcode: {
+        title: "Löschen bestätigen",
+        content:
+          "Sind Sie sicher, dass Sie den Barcode löschen wollen mit dem Namen",
+      },
       leave: {
         title: "Seite verlassen?",
         content:

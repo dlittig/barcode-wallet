@@ -14,6 +14,8 @@ export const en_US = {
       takePhoto: "Take photo",
       selectFile: "Select file",
       create: "Create",
+      accept: "Okay",
+      cancel: "Cancel",
     },
     empty: {
       home: "No barcodes saved. You can store one with the button below",
@@ -28,6 +30,10 @@ export const en_US = {
       app: "BarcodeWallet",
     },
     dialogs: {
+      delete_barcode: {
+        title: "Confirm deletion",
+        content: "Are you sure you want to delete the barcode",
+      },
       leave: {
         title: "Leave screen?",
         content:
@@ -40,12 +46,14 @@ export const en_US = {
           notGranted: "Camera permission has not been granted",
           successfullyGranted: "Permission successfully granted",
           failedToGrant: "Failed to grant permission",
-          failedToAskForPermission: "An error occured while asking for Camera permission"
+          failedToAskForPermission:
+            "An error occured while asking for Camera permission",
         },
         media: {
           successfullyGranted: "Permission successfully granted",
           failedToGrant: "Failed to grant permission",
-          failedToAskForPermission: "An error occured while asking for Media permission"
+          failedToAskForPermission:
+            "An error occured while asking for Media permission",
         },
       },
       messages: {

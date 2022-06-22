@@ -15,6 +15,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 6,
   },
+  emptyContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+  },
+  emptyText: {
+    textAlign: "center",
+    padding: 16,
+    color: "#ccc",
+  },
 });
 
 export default styles;

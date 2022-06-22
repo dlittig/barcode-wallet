@@ -7,4 +7,5 @@ export type CardComponentType = {
   onOpen: () => void;
   onEdit: () => void;
   onUsed: () => void;
+  onDelete: () => void;
 };

@@ -6,30 +6,37 @@ import {
   Card as UIKittenCard,
 } from "@ui-kitten/components";
 import { Lobster_400Regular, useFonts } from "@expo-google-fonts/lobster";
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { FC, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import * as Brightness from "expo-brightness";
 import Barcode from "../../components/Barcode";
 
-import Card from "../../components/Card/Card";
-import Icons from "../../components/Icons";
 import List from "../../components/List";
+import Card from "../../components/Card";
+import Icons from "../../components/Icons";
+import Qrcode from "../../components/Qrcode";
 import MainAction from "../../components/MainAction";
+import { RootReducerType } from "../../store/reducers";
 import TopBar from "../../components/Navigator/Bars/TopBar";
 import { APP_BARCODE_EDIT } from "../../components/Navigator/Routes";
-import Qrcode from "../../components/Qrcode";
-import { RootReducerType } from "../../store/reducers";
 import {
   barcodesAllSortedUnusedAndValidSelector,
   barcodesAllSortedUsedOrExpiredSelector,
   barcodesByIdSelector,
 } from "../../store/selectors";
 import { BARCODE_TYPE } from "../../store/types";
-import { humanReadableDate, humanReadableTime } from "../../utils";
-import * as Brightness from "expo-brightness";
+import {
+  confirmDeleteBarcode,
+  humanReadableDate,
+  humanReadableTime,
+} from "../../utils";
 import style from "./Home.style";
-import { updateBarcode } from "../../store/actions/barcodeActions";
+import {
+  deleteBarcode,
+  updateBarcode,
+} from "../../store/actions/barcodeActions";
 
 type ModalContentComponentType = {
   id: string;
@@ -136,6 +143,11 @@ const Home: FC = () => {
         <>
           <TopBar />
           <List level="2" spacer>
+            {validBarcodes.length === 0 && invalidBarcodes.length === 0 && (
+              <View style={style.emptyContainer}>
+                <Text style={style.emptyText}>{t("empty.home")}</Text>
+              </View>
+            )}
             {validBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
@@ -144,6 +156,7 @@ const Home: FC = () => {
                 isUsed={barcode.used}
                 color={barcode.color}
                 description={barcode.description}
+                onDelete={() => confirmDeleteBarcode(dispatch, barcode)}
                 onEdit={() =>
                   navigation.navigate(
                     t(APP_BARCODE_EDIT) as never,
@@ -185,6 +198,7 @@ const Home: FC = () => {
                   )
                 }
                 onOpen={() => setId(barcode.id)}
+                onDelete={() => confirmDeleteBarcode(dispatch, barcode)}
                 onUsed={() =>
                   dispatch(
                     updateBarcode({
