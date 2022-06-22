@@ -1,28 +1,28 @@
 import * as ImagePicker from "expo-image-picker";
 
-export const requestImagePickerCameraPermission = async (): Promise<boolean> => {
-  let imagePickerStatus: ImagePicker.PermissionStatus;
+import { showToast } from "./ui";
+import i18n from "../translations/i18n";
 
-  try {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    imagePickerStatus = status;
-  } catch (e) {
-    console.error(
-      `An error occured when asking for Image Picker permission: ${e}`
-    );
+export const requestImagePickerCameraPermission =
+  async (): Promise<boolean> => {
+    let imagePickerStatus: ImagePicker.PermissionStatus;
 
-    return false;
-  }
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      imagePickerStatus = status;
+    } catch (e) {
+      showToast(i18n.t("toasts.permissions.camera.failedToAskForPermission"));
 
-  if (imagePickerStatus !== ImagePicker.PermissionStatus.GRANTED) {
-    console.warn(
-      `Notification permission was not granted: ${imagePickerStatus}`
-    );
-    return false;
-  }
+      return false;
+    }
 
-  return true;
-};
+    if (imagePickerStatus !== ImagePicker.PermissionStatus.GRANTED) {
+      showToast(i18n.t("toasts.permissions.camera.notGranted"));
+      return false;
+    }
+
+    return true;
+  };
 
 export const requestImagePickerMediaPermission = async (): Promise<boolean> => {
   let imagePickerStatus: ImagePicker.PermissionStatus;
@@ -31,23 +31,18 @@ export const requestImagePickerMediaPermission = async (): Promise<boolean> => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     imagePickerStatus = status;
   } catch (e) {
-    console.error(
-      `An error occured when asking for Image Picker permission: ${e}`
-    );
+    showToast(i18n.t("toasts.permissions.media.failedToAskForPermission"));
 
     return false;
   }
 
   if (imagePickerStatus !== ImagePicker.PermissionStatus.GRANTED) {
-    console.warn(
-      `Notification permission was not granted: ${imagePickerStatus}`
-    );
+    showToast(i18n.t("toasts.permissions.media.notGranted"));
     return false;
   }
 
   return true;
 };
-
 
 export const launchCamera =
   async (): Promise<ImagePicker.ImagePickerResult> => {

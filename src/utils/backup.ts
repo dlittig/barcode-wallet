@@ -2,7 +2,9 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 
+import { showToast } from "./ui";
 import pack from "../../package.json";
+import i18n from "../translations/i18n";
 import { backupTimestamp } from "./format";
 import { BarcodeState } from "../store/types";
 
@@ -45,10 +47,12 @@ export const createBackup = async (data: BackupPayload) => {
     await FileSystem.writeAsStringAsync(fileUri, serializedData, {
       encoding: FileSystem.EncodingType.UTF8,
     });
-    
-    await Sharing.shareAsync(fileUri, { dialogTitle: "Save backup" });
+
+    await Sharing.shareAsync(fileUri, {
+      dialogTitle: i18n.t("text.settings.export.dialog"),
+    });
   } catch (e) {
-    console.warn(`Failed to create backup`, e, fileUri);
+    showToast(i18n.t("toasts.messages.cantCreateBackup"));
   }
 
   // Remove the local file now
@@ -58,7 +62,7 @@ export const createBackup = async (data: BackupPayload) => {
       await FileSystem.deleteAsync(fileUri);
     }
   } catch (e) {
-    console.warn("Failed to delete local file");
+    showToast(i18n.t("toasts.messages.failedToDeleteLocalFile"));
   }
 };
 
@@ -86,7 +90,7 @@ export const readBackup = async (): Promise<Backup | null> => {
         return null;
       }
     } catch (e) {
-      console.warn("Could not import from file", e);
+      showToast(i18n.t("toasts.messages.cantImport"));
       return null;
     }
   }

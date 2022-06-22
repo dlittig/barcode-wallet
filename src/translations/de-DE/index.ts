@@ -40,17 +40,25 @@ export const de_DE = {
           notGranted: "Kamera-Berechtigung konnte nicht erteilt werden",
           successfullyGranted: "Berechtigung erfolgreich erteilt",
           failedToGrant: "Berechtigung konnte nicht erteilt werden",
+          failedToAskForPermission:
+            "Es ist ein Fehler bei der Abfrage der Kameraberechtigung aufgetreten",
         },
         media: {
           successfullyGranted: "Berechtigung erfolgreich erteilt",
           failedToGrant: "Berechtigung konnte nicht erteilt werden",
+          failedToAskForPermission:
+            "Es ist ein Fehler bei der Abfrage der Medienberechtigung aufgetreten",
         },
       },
       messages: {
         typeNotSupported: "Verzeihung, {{type}} wird nicht unterstützt",
         barcodeValidationFailed:
           "Nicht alle notwendigen Felder enthalten Werte.",
-        tooManybarcodes: "Zu viele Codes erkannt. Bitte nur einen Barcode scannen.",
+        tooManybarcodes:
+          "Zu viele Codes erkannt. Bitte nur einen Barcode scannen.",
+        cantCreateBackup: "Backup konnte nicht erzeugt werden.",
+        failedToDeleteLocalFile: "Lokale Datei konnte nicht entfernt werden.",
+        cantImport: "Konnte Daten nicht importieren",
       },
     },
     text: {
@@ -94,6 +102,7 @@ export const de_DE = {
         export: {
           title: "Export",
           description: "Daten in einer Datei speichern",
+          dialog: "Backup speichern",
         },
       },
     },

@@ -40,10 +40,12 @@ export const en_US = {
           notGranted: "Camera permission has not been granted",
           successfullyGranted: "Permission successfully granted",
           failedToGrant: "Failed to grant permission",
+          failedToAskForPermission: "An error occured while asking for Camera permission"
         },
         media: {
           successfullyGranted: "Permission successfully granted",
           failedToGrant: "Failed to grant permission",
+          failedToAskForPermission: "An error occured while asking for Media permission"
         },
       },
       messages: {
@@ -51,6 +53,9 @@ export const en_US = {
         barcodeValidationFailed:
           "Not all necessary fields are containing values.",
         tooManybarcodes: "Got too many barcodes. Try to scan only one barcode.",
+        cantCreateBackup: "Failed to create backup.",
+        failedToDeleteLocalFile: "Failed to delete local file.",
+        cantImport: "Could not import from file.",
       },
     },
     text: {
@@ -93,6 +98,7 @@ export const en_US = {
         export: {
           title: "Export",
           description: "Save your data to file",
+          dialog: "Save backup",
         },
       },
     },

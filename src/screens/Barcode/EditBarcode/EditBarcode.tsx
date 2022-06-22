@@ -37,7 +37,11 @@ import { Barcode, BARCODE_TYPE } from "../../../store/types";
 import { barcodesByIdSelector } from "../../../store/selectors";
 import { APP_BARCODE_SCAN } from "../../../components/Navigator/Routes";
 import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
-import { requestImagePickerMediaPermission, take } from "../../../utils";
+import {
+  requestImagePickerMediaPermission,
+  showToast,
+  take,
+} from "../../../utils";
 
 import style from "./EditBarcode.style";
 
@@ -92,7 +96,7 @@ const EditBarcode = ({ route }: { route: any }) => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
 
     if (status !== "granted") {
-      console.warn(t("toasts.permissions.camera.notGranted"));
+      showToast(t("toasts.permissions.camera.notGranted"));
     } else {
       successCallback();
     }
@@ -124,13 +128,13 @@ const EditBarcode = ({ route }: { route: any }) => {
       setCode(data);
       setCodeTypeFromExpoBarcodeScannerResult({ type, data });
     } else {
-      console.warn(t("toasts.messages.typeNotSupported", { type }));
+      showToast(t("toasts.messages.typeNotSupported", { type }));
     }
   };
 
   const onSave = () => {
     if (name.length === 0 || description.length === 0) {
-      console.warn(t("toasts.messages.barcodeValidationFailed"));
+      showToast(t("toasts.messages.barcodeValidationFailed"));
       return;
     }
 
@@ -181,12 +185,12 @@ const EditBarcode = ({ route }: { route: any }) => {
               setCode(code.data);
               setCodeTypeFromExpoBarcodeScannerResult(code);
             } else {
-              console.warn(
+              showToast(
                 t("toasts.messages.typeNotSupported", { type: code.type })
               );
             }
           } else {
-            console.warn(t("toasts.messages.tooManybarcodes"));
+            showToast(t("toasts.messages.tooManybarcodes"));
           }
         }
       }
