@@ -6,9 +6,9 @@ import {
   Card as UIKittenCard,
 } from "@ui-kitten/components";
 import { Lobster_400Regular, useFonts } from "@expo-google-fonts/lobster";
-import React, { FC, useLayoutEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { BackHandler, Dimensions, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as Brightness from "expo-brightness";
 import Barcode from "../../components/Barcode";
@@ -62,6 +62,22 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
     barcodesByIdSelector(state, id)
   );
   const brightness = useRef<number | undefined>();
+
+  useLayoutEffect(() => {
+    const backpressHandler = () => {
+      if (id.length > 0) {
+        onClose();
+        return true;
+      }
+
+      return false;
+    };
+
+    BackHandler.addEventListener("hardwareBackPress", backpressHandler);
+
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", backpressHandler);
+  }, []);
 
   useLayoutEffect(() => {
     (async () => {
