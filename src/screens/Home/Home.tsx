@@ -22,8 +22,10 @@ import { RootReducerType } from "../../store/reducers";
 import TopBar from "../../components/Navigator/Bars/TopBar";
 import { APP_BARCODE_EDIT } from "../../components/Navigator/Routes";
 import {
+  barcodesAllSortedExpiredSelector,
   barcodesAllSortedUnusedAndValidSelector,
   barcodesAllSortedUsedOrExpiredSelector,
+  barcodesAllSortedUsedSelector,
   barcodesByIdSelector,
 } from "../../store/selectors";
 import { Barcode as BarcodeType, BARCODE_TYPE } from "../../store/types";
@@ -116,6 +118,12 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
                 <Text>{`${humanReadableDate(barcode.expiryDate)}`}</Text>
               </View>
             )}
+            {barcode.used && barcode.usageDate && (
+              <View style={modalStyle.timeInfo}>
+                <Text>{t("text.home.usageDate") as string}:</Text>
+                <Text>{`${humanReadableDate(barcode.usageDate)}`}</Text>
+              </View>
+            )}
 
             {/* Just a box to give the modal a certain width */}
             <View
@@ -143,7 +151,8 @@ const Home: FC = () => {
     "Lobster-Regular": Lobster_400Regular,
   });
   const validBarcodes = useSelector(barcodesAllSortedUnusedAndValidSelector);
-  const invalidBarcodes = useSelector(barcodesAllSortedUsedOrExpiredSelector);
+  const expiredBarcodes = useSelector(barcodesAllSortedExpiredSelector);
+  const usedBarcodes = useSelector(barcodesAllSortedUsedSelector);
   const [currentBarcode, setCurrentBarcode] = useState<BarcodeType | null>(
     null
   );
@@ -153,7 +162,7 @@ const Home: FC = () => {
 
   const onClose = () => {
     if (currentBarcode !== null) {
-      confirmMarkCodeAsUsed(dispatch, currentBarcode);
+      if (!currentBarcode.used) confirmMarkCodeAsUsed(dispatch, currentBarcode);
       setCurrentBarcode(null);
     }
   };
@@ -164,11 +173,13 @@ const Home: FC = () => {
         <>
           <TopBar />
           <List level="2" spacer>
-            {validBarcodes.length === 0 && invalidBarcodes.length === 0 && (
-              <View style={style.emptyContainer}>
-                <Text style={style.emptyText}>{t("empty.home")}</Text>
-              </View>
-            )}
+            {validBarcodes.length === 0 &&
+              usedBarcodes.length === 0 &&
+              expiredBarcodes.length === 0 && (
+                <View style={style.emptyContainer}>
+                  <Text style={style.emptyText}>{t("empty.home")}</Text>
+                </View>
+              )}
             {validBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
@@ -190,21 +201,58 @@ const Home: FC = () => {
                     updateBarcode({
                       ...barcode,
                       used: true,
+                      usageDate: Date.now(),
                     })
                   )
                 }
               />
             ))}
 
-            {invalidBarcodes.length > 0 && (
+            {usedBarcodes.length > 0 && (
               <View style={style.divider}>
                 <Text category="c1" appearance="hint" style={style.dividerText}>
-                  {t("text.home.usedOrExpired")}
+                  {t("text.home.used")}
                 </Text>
               </View>
             )}
 
-            {invalidBarcodes.map((barcode, index) => (
+            {usedBarcodes.map((barcode, index) => (
+              <Card
+                key={`barcode-card-${index}`}
+                id={barcode.id}
+                name={barcode.name}
+                isUsed={barcode.used}
+                color={barcode.color}
+                description={barcode.description}
+                onEdit={() =>
+                  navigation.navigate(
+                    t(APP_BARCODE_EDIT) as never,
+                    { id: barcode.id } as never
+                  )
+                }
+                onOpen={() => setCurrentBarcode(barcode)}
+                onDelete={() => confirmDeleteBarcode(dispatch, barcode)}
+                onUsed={() =>
+                  dispatch(
+                    updateBarcode({
+                      ...barcode,
+                      used: false,
+                      usageDate: undefined,
+                    })
+                  )
+                }
+              />
+            ))}
+
+            {expiredBarcodes.length > 0 && (
+              <View style={style.divider}>
+                <Text category="c1" appearance="hint" style={style.dividerText}>
+                  {t("text.home.expired")}
+                </Text>
+              </View>
+            )}
+
+            {expiredBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
                 id={barcode.id}

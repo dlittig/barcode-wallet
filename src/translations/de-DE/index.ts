@@ -92,6 +92,9 @@ export const de_DE = {
         addedOn: "Hinzugefügt am",
         usedOrExpired: "Benutzt oder abgelaufen",
         expiresOn: "Läuft ab am",
+        expired: "Abgelaufen",
+        used: "Genutzt",
+        usageDate: "Genutzt am"
       },
       settings: {
         about: {

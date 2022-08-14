@@ -16,6 +16,7 @@ export type Barcode = {
   expires: boolean;
   expiryDate: number;
   used: boolean;
+  usageDate?: number;
   [k: string]: unknown;
 };
 

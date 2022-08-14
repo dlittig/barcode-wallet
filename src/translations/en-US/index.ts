@@ -90,6 +90,9 @@ export const en_US = {
         addedOn: "Added on",
         usedOrExpired: "Used or expired",
         expiresOn: "Expires on",
+        expired: "Expired",
+        used: "Used",
+        usageDate: "Used on"
       },
       settings: {
         about: {
