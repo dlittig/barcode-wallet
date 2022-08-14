@@ -6,7 +6,7 @@ import {
   Card as UIKittenCard,
 } from "@ui-kitten/components";
 import { Lobster_400Regular, useFonts } from "@expo-google-fonts/lobster";
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { FC, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BackHandler, Dimensions, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,17 +26,15 @@ import {
   barcodesAllSortedUsedOrExpiredSelector,
   barcodesByIdSelector,
 } from "../../store/selectors";
-import { BARCODE_TYPE } from "../../store/types";
+import { Barcode as BarcodeType, BARCODE_TYPE } from "../../store/types";
 import {
   confirmDeleteBarcode,
+  confirmMarkCodeAsUsed,
   humanReadableDate,
   humanReadableTime,
 } from "../../utils";
 import style from "./Home.style";
-import {
-  deleteBarcode,
-  updateBarcode,
-} from "../../store/actions/barcodeActions";
+import { updateBarcode } from "../../store/actions/barcodeActions";
 
 type ModalContentComponentType = {
   id: string;
@@ -146,12 +144,19 @@ const Home: FC = () => {
   });
   const validBarcodes = useSelector(barcodesAllSortedUnusedAndValidSelector);
   const invalidBarcodes = useSelector(barcodesAllSortedUsedOrExpiredSelector);
-  const [id, setId] = useState<string>("");
+  const [currentBarcode, setCurrentBarcode] = useState<BarcodeType | null>(
+    null
+  );
   const navigation = useNavigation();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const onClose = () => setId("");
+  const onClose = () => {
+    if (currentBarcode !== null) {
+      confirmMarkCodeAsUsed(dispatch, currentBarcode);
+      setCurrentBarcode(null);
+    }
+  };
 
   return (
     <>
@@ -179,7 +184,7 @@ const Home: FC = () => {
                     { id: barcode.id } as never
                   )
                 }
-                onOpen={() => setId(barcode.id)}
+                onOpen={() => setCurrentBarcode(barcode)}
                 onUsed={() =>
                   dispatch(
                     updateBarcode({
@@ -213,7 +218,7 @@ const Home: FC = () => {
                     { id: barcode.id } as never
                   )
                 }
-                onOpen={() => setId(barcode.id)}
+                onOpen={() => setCurrentBarcode(barcode)}
                 onDelete={() => confirmDeleteBarcode(dispatch, barcode)}
                 onUsed={() =>
                   dispatch(
@@ -228,11 +233,11 @@ const Home: FC = () => {
           </List>
 
           <Modal
-            visible={id.length > 0}
+            visible={currentBarcode !== null}
             backdropStyle={style.modalBackdrop}
             onBackdropPress={onClose}
           >
-            <ModalContent id={id} onClose={onClose} />
+            <ModalContent id={currentBarcode?.id || ""} onClose={onClose} />
           </Modal>
           <MainAction>
             <Button

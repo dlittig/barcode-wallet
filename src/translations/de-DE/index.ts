@@ -16,6 +16,7 @@ export const de_DE = {
       create: "Anlegen",
       accept: "Okay",
       cancel: "Abbrechen",
+      no: "Nein"
     },
     empty: {
       home: "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
@@ -30,6 +31,10 @@ export const de_DE = {
       app: "BarcodeWallet",
     },
     dialogs: {
+      confirm_barcode_as_used: {
+        title: "Hinweis",
+        content: "Wollen Sie diesen Code als genutzt markieren?",
+      },
       delete_barcode: {
         title: "Löschen bestätigen",
         content:

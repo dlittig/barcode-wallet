@@ -16,6 +16,7 @@ export const en_US = {
       create: "Create",
       accept: "Okay",
       cancel: "Cancel",
+      no: "No"
     },
     empty: {
       home: "No barcodes saved. You can store one with the button below",
@@ -30,6 +31,10 @@ export const en_US = {
       app: "BarcodeWallet",
     },
     dialogs: {
+      confirm_barcode_as_used: {
+        title: "Notice",
+        content: "Do you want to mark this code as used?",
+      },
       delete_barcode: {
         title: "Confirm deletion",
         content: "Are you sure you want to delete the barcode",

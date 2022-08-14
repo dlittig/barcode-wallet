@@ -1,6 +1,6 @@
 import { Alert, ToastAndroid } from "react-native";
 import { AnyAction, Dispatch } from "redux";
-import { deleteBarcode } from "../store/actions/barcodeActions";
+import { deleteBarcode, updateBarcode } from "../store/actions/barcodeActions";
 import { Barcode } from "../store/types";
 import i18n from "../translations/i18n";
 
@@ -14,8 +14,10 @@ export const showToast = (text: string) => {
   );
 };
 
-
-export const confirmDeleteBarcode = (dispatch: Dispatch<AnyAction>, barcode: Barcode) => {
+export const confirmDeleteBarcode = (
+  dispatch: Dispatch<AnyAction>,
+  barcode: Barcode
+) => {
   const { t } = i18n;
 
   Alert.alert(
@@ -31,6 +33,37 @@ export const confirmDeleteBarcode = (dispatch: Dispatch<AnyAction>, barcode: Bar
         text: t("actions.accept"),
         onPress: () => {
           dispatch(deleteBarcode(barcode));
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
+
+export const confirmMarkCodeAsUsed = (
+  dispatch: Dispatch<AnyAction>,
+  barcode: Barcode
+) => {
+  const { t } = i18n;
+
+  Alert.alert(
+    t("dialogs.confirm_barcode_as_used.title"),
+    `${t("dialogs.confirm_barcode_as_used.content")}`,
+    [
+      {
+        text: t("actions.no"),
+        onPress: () => undefined,
+        style: "cancel",
+      },
+      {
+        text: t("actions.accept"),
+        onPress: () => {
+          dispatch(
+            updateBarcode({
+              ...barcode,
+              used: true,
+            })
+          );
         },
       },
     ],
