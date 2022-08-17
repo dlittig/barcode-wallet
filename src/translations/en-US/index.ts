@@ -16,7 +16,7 @@ export const en_US = {
       create: "Create",
       accept: "Okay",
       cancel: "Cancel",
-      no: "No"
+      no: "No",
     },
     empty: {
       home: "No barcodes saved. You can store one with the button below",
@@ -69,6 +69,8 @@ export const en_US = {
         cantCreateBackup: "Failed to create backup.",
         failedToDeleteLocalFile: "Failed to delete local file.",
         cantImport: "Could not import from file.",
+        codeUsed: "Code has been moved to the 'Used' section",
+        codeRestored: "Code has been moved up",
       },
     },
     text: {
@@ -92,7 +94,7 @@ export const en_US = {
         expiresOn: "Expires on",
         expired: "Expired",
         used: "Used",
-        usageDate: "Used on"
+        usageDate: "Used on",
       },
       settings: {
         about: {

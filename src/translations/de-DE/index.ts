@@ -16,7 +16,7 @@ export const de_DE = {
       create: "Anlegen",
       accept: "Okay",
       cancel: "Abbrechen",
-      no: "Nein"
+      no: "Nein",
     },
     empty: {
       home: "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
@@ -71,6 +71,8 @@ export const de_DE = {
         cantCreateBackup: "Backup konnte nicht erzeugt werden.",
         failedToDeleteLocalFile: "Lokale Datei konnte nicht entfernt werden.",
         cantImport: "Konnte Daten nicht importieren",
+        codeUsed: "Barcode wurde in den Bereich 'Benutzt' verschoben",
+        codeRestored: "Barcode wurde nach oben verschoben",
       },
     },
     text: {
@@ -94,7 +96,7 @@ export const de_DE = {
         expiresOn: "Läuft ab am",
         expired: "Abgelaufen",
         used: "Genutzt",
-        usageDate: "Genutzt am"
+        usageDate: "Genutzt am",
       },
       settings: {
         about: {

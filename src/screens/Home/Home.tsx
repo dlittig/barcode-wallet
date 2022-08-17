@@ -34,6 +34,7 @@ import {
   confirmMarkCodeAsUsed,
   humanReadableDate,
   humanReadableTime,
+  showToast,
 } from "../../utils";
 import style from "./Home.style";
 import { updateBarcode } from "../../store/actions/barcodeActions";
@@ -196,15 +197,16 @@ const Home: FC = () => {
                   )
                 }
                 onOpen={() => setCurrentBarcode(barcode)}
-                onUsed={() =>
+                onUsed={() => {
                   dispatch(
                     updateBarcode({
                       ...barcode,
                       used: true,
                       usageDate: Date.now(),
                     })
-                  )
-                }
+                  );
+                  showToast(t("toasts.messages.codeUsed"));
+                }}
               />
             ))}
 
@@ -232,15 +234,16 @@ const Home: FC = () => {
                 }
                 onOpen={() => setCurrentBarcode(barcode)}
                 onDelete={() => confirmDeleteBarcode(dispatch, barcode)}
-                onUsed={() =>
+                onUsed={() => {
                   dispatch(
                     updateBarcode({
                       ...barcode,
                       used: false,
                       usageDate: undefined,
                     })
-                  )
-                }
+                  );
+                  showToast(t("toasts.messages.codeRestored"));
+                }}
               />
             ))}
 
