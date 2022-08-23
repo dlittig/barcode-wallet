@@ -8,11 +8,12 @@ import {
   Text,
   Toggle,
 } from "@ui-kitten/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "react-i18next";
 import * as RNImagePicker from "expo-image-picker";
+import { hasStringAsync, getStringAsync } from "expo-clipboard";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -38,6 +39,8 @@ import { barcodesByIdSelector } from "../../../store/selectors";
 import { APP_BARCODE_SCAN } from "../../../components/Navigator/Routes";
 import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
 import {
+  confirmReadFromClipboard,
+  isValidBarcode,
   requestImagePickerMediaPermission,
   showToast,
   take,
@@ -198,6 +201,32 @@ const EditBarcode = ({ route }: { route: any }) => {
       console.debug(error);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (await hasStringAsync()) {
+        const clipboardText = await getStringAsync();
+
+        // Try all barcode types
+        const codeTypes = Object.values(BARCODE_TYPE);
+        let foundType: keyof typeof BARCODE_TYPE | null = null;
+
+        for (let i = 0; i < codeTypes.length; i++) {
+          if (isValidBarcode(clipboardText, codeTypes[i])) {
+            foundType = codeType;
+            break;
+          }
+        }
+
+        if (foundType !== null) {
+          confirmReadFromClipboard(foundType, () => {
+            setCode(clipboardText);
+            setCodeType(foundType!!);
+          });
+        }
+      }
+    })();
+  }, []);
 
   return (
     <>

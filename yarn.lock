@@ -1847,16 +1847,7 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react@*":
-  version "17.0.47"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.47.tgz#4ee71aaf4c5a9e290e03aa4d0d313c5d666b3b78"
-  integrity sha512-mk0BL8zBinf2ozNr3qPnlu1oyVTYq+4V7WA76RgxUAtf0Em/Wbid38KN6n4abEkvO4xMTBWmnP1FtQzgkEiJoA==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@~17.0.21":
+"@types/react@*", "@types/react@~17.0.21":
   version "17.0.47"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.47.tgz#4ee71aaf4c5a9e290e03aa4d0d313c5d666b3b78"
   integrity sha512-mk0BL8zBinf2ozNr3qPnlu1oyVTYq+4V7WA76RgxUAtf0Em/Wbid38KN6n4abEkvO4xMTBWmnP1FtQzgkEiJoA==
@@ -3271,6 +3262,11 @@ expo-brightness@~10.2.0:
   integrity sha512-ZFUJWj9tt6WqUG7Ub6C+X3vS+1ti8NitV5NjroxKVXl1Pl3tyKccM3QjWSfrhLkncTXA3Tm+0zMvxTsHw4nu5w==
   dependencies:
     "@expo/config-plugins" "^4.0.14"
+
+expo-clipboard@~3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/expo-clipboard/-/expo-clipboard-3.0.1.tgz#c3a46b08bb376bc5b4a5ed75631e56f5e1075db8"
+  integrity sha512-y3gooHxfXpdlslS8GLTrXdWKGCr5hXLI+Y49PolbjUqBVh819+Z/T8bdskUf5YNxu/Bb0HG1yuHpHPe8XyvxSA==
 
 expo-constants@~13.1.1:
   version "13.1.1"

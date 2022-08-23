@@ -17,6 +17,7 @@ export const en_US = {
       accept: "Okay",
       cancel: "Cancel",
       no: "No",
+      ignore: "Ignore",
     },
     empty: {
       home: "No barcodes saved. You can store one with the button below",
@@ -43,6 +44,10 @@ export const en_US = {
         title: "Leave screen?",
         content:
           "You might have unsaved changes. Are you sure you want to leave the screen?",
+      },
+      confirm_paste_clipboard: {
+        title: "Clipboard",
+        content: "We noticed that you have an {{type}} barcode in your clipboard. Do you want to paste it?",
       },
     },
     toasts: {

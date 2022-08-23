@@ -17,6 +17,7 @@ export const de_DE = {
       accept: "Okay",
       cancel: "Abbrechen",
       no: "Nein",
+      ignore: "Ignorieren",
     },
     empty: {
       home: "Keine Elemente gespeichert. Du kannst ein neues Element mit dem Knopf unten auf dieser Seite anlegen.",
@@ -44,6 +45,11 @@ export const de_DE = {
         title: "Seite verlassen?",
         content:
           "Es könnten nicht gespeicherte Änderungen vorhanden sein. Seite wirklich verlassen?",
+      },
+      confirm_paste_clipboard: {
+        title: "Zwischenablage",
+        content:
+          "Wir haben einen {{type}}-Code in der Zwischenablage erkannt. Wollen Sie ihn einfügen?",
       },
     },
     toasts: {

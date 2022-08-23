@@ -1,7 +1,7 @@
 import { Alert, ToastAndroid } from "react-native";
 import { AnyAction, Dispatch } from "redux";
 import { deleteBarcode, updateBarcode } from "../store/actions/barcodeActions";
-import { Barcode } from "../store/types";
+import { Barcode, BARCODE_TYPE } from "../store/types";
 import i18n from "../translations/i18n";
 
 export const showToast = (text: string) => {
@@ -64,6 +64,32 @@ export const confirmMarkCodeAsUsed = (
               used: true,
             })
           );
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
+
+export const confirmReadFromClipboard = (
+  codeType: keyof typeof BARCODE_TYPE,
+  successCallback: () => void
+) => {
+  const { t } = i18n;
+
+  Alert.alert(
+    t("dialogs.confirm_paste_clipboard.title"),
+    `${t("dialogs.confirm_paste_clipboard.content", { type: codeType })}`,
+    [
+      {
+        text: t("actions.ignore"),
+        onPress: () => undefined,
+        style: "cancel",
+      },
+      {
+        text: t("actions.accept"),
+        onPress: () => {
+          successCallback();
         },
       },
     ],

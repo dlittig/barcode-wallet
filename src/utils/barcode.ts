@@ -1,3 +1,6 @@
+import JSBarcode from "jsbarcode";
+import { BARCODE_TYPE } from "../store/types";
+
 // Props to: https://snack.expo.dev/@wodin/better-barcode-generator
 export const getEncodingHeight = (
   encoding: Record<string, any>,
@@ -105,4 +108,22 @@ export const messureText = (
   var size = ctx.measureText(string).width;
 
   return size;
+};
+
+export const isValidBarcode = (
+  barcode: string,
+  type: keyof typeof BARCODE_TYPE
+) => {
+  try {
+    if (type !== BARCODE_TYPE.QR && type !== BARCODE_TYPE.CODE128) {
+      const result: Record<string, any> = {};
+      JSBarcode(result, barcode, { format: type });
+    } else {
+      throw new Error("This code lacks validation");
+    }
+  } catch (e: any) {
+    return false;
+  }
+
+  return true;
 };
