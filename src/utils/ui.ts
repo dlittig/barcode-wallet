@@ -96,3 +96,26 @@ export const confirmReadFromClipboard = (
     { cancelable: false }
   );
 };
+
+export const confirmDuplicateBarcode = (successCallback: () => void) => {
+  const { t } = i18n;
+
+  Alert.alert(
+    t("dialogs.confirm_duplicate_barcode.title"),
+    `${t("dialogs.confirm_duplicate_barcode.content")}`,
+    [
+      {
+        text: t("actions.no"),
+        onPress: () => undefined,
+        style: "cancel",
+      },
+      {
+        text: t("actions.accept"),
+        onPress: () => {
+          successCallback();
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};

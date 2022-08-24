@@ -51,6 +51,10 @@ export const de_DE = {
         content:
           "Wir haben einen {{type}}-Code in der Zwischenablage erkannt. Wollen Sie ihn einfügen?",
       },
+      confirm_duplicate_barcode: {
+        title: "Duplikat",
+        content: "Ein Barcode des selben Typs existiert bereits. Möchten Sie diesen trotzdem speichern?",
+      },
     },
     toasts: {
       permissions: {

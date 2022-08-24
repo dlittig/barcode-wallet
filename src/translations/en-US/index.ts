@@ -49,6 +49,10 @@ export const en_US = {
         title: "Clipboard",
         content: "We noticed that you have an {{type}} barcode in your clipboard. Do you want to paste it?",
       },
+      confirm_duplicate_barcode: {
+        title: "Duplicate",
+        content: "The barcode with the same type already exists. Do you want to save it anyway?",
+      },
     },
     toasts: {
       permissions: {

@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
 } from "@ui-kitten/components";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "react-i18next";
@@ -35,10 +35,14 @@ import { RootReducerType } from "../../../store/reducers";
 import Colorpicker from "../../../components/Colorpicker";
 import { CARD_COLOR } from "../../../components/Card/Card";
 import { Barcode, BARCODE_TYPE } from "../../../store/types";
-import { barcodesByIdSelector } from "../../../store/selectors";
+import {
+  barcodesAllSelector,
+  barcodesByIdSelector,
+} from "../../../store/selectors";
 import { APP_BARCODE_SCAN } from "../../../components/Navigator/Routes";
 import BackBar from "../../../components/Navigator/Bars/BackBar/BackBar";
 import {
+  confirmDuplicateBarcode,
   confirmReadFromClipboard,
   isValidBarcode,
   requestImagePickerMediaPermission,
@@ -65,6 +69,9 @@ const EditBarcode = ({ route }: { route: any }) => {
   const barcodeId = route.params ? (route.params["id"] as string) : "";
   const barcode = useSelector((state: RootReducerType) =>
     barcodesByIdSelector(state, barcodeId)
+  );
+  const allBarcodesByIds = useSelector((state: RootReducerType) =>
+    barcodesAllSelector(state)
   );
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -104,6 +111,19 @@ const EditBarcode = ({ route }: { route: any }) => {
       successCallback();
     }
   };
+
+  const doesBarcodeExist = useCallback(() => {
+    const values = Object.values(allBarcodesByIds);
+
+    for (let i = 0; i < values.length; i++) {
+      const item = values[i];
+      if (item.code === code && item.type === codeType) {
+        return true;
+      }
+    }
+
+    return false;
+  }, [code, codeType]);
 
   const setCodeTypeFromExpoBarcodeScannerResult = (
     scannerResult: BarCodeScannerResult
@@ -154,13 +174,25 @@ const EditBarcode = ({ route }: { route: any }) => {
       time: take(barcode, "time", Date.now()),
     };
 
-    if (barcodeId.length > 0) {
-      dispatch(updateBarcode(barcodeObject));
-    } else {
-      dispatch(addBarcode(barcodeObject));
-    }
+    if (doesBarcodeExist()) {
+      confirmDuplicateBarcode(() => {
+        if (barcodeId.length > 0) {
+          dispatch(updateBarcode(barcodeObject));
+        } else {
+          dispatch(addBarcode(barcodeObject));
+        }
 
-    navigation.goBack();
+        navigation.goBack();
+      });
+    } else {
+      if (barcodeId.length > 0) {
+        dispatch(updateBarcode(barcodeObject));
+      } else {
+        dispatch(addBarcode(barcodeObject));
+      }
+
+      navigation.goBack();
+    }
   };
 
   const retrieveFromFile = async () => {
