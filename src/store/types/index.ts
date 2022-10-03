@@ -28,6 +28,9 @@ export type BarcodeState = {
     allIds: Array<Barcode["id"]>;
   };
   sortedBarcodes: string[];
+  filter: {
+    phrase: string;
+  };
 };
 
 export type SettingsState = {

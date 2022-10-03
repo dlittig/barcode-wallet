@@ -4,6 +4,8 @@ import {
   BARCODE_ADD,
   BARCODE_DELETE,
   BARCODE_READ_FROM_BACKUP,
+  BARCODE_RESET_FILTER_PHRASE,
+  BARCODE_SET_FILTER_PHRASE,
   BARCODE_UPDATE,
 } from "../constants/barcodeConstants";
 import { Barcode, BarcodeState } from "../types";
@@ -14,6 +16,9 @@ const initialState: BarcodeState = {
     allIds: [],
   },
   sortedBarcodes: [],
+  filter: {
+    phrase: "",
+  },
 };
 
 export const barcodesReducer = (
@@ -56,6 +61,17 @@ export const barcodesReducer = (
         (item) => item !== barcode.id
       );
       delete newState.barcodes.byId[barcode.id];
+
+      return newState;
+    case BARCODE_SET_FILTER_PHRASE:
+      newState = { ...state };
+      console.log(newState, action);
+      newState.filter.phrase = action.phrase;
+
+      return newState;
+    case BARCODE_RESET_FILTER_PHRASE:
+      newState = { ...state };
+      newState.filter.phrase = "";
 
       return newState;
     case BARCODE_READ_FROM_BACKUP:

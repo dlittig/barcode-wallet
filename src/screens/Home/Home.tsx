@@ -6,7 +6,7 @@ import {
   Card as UIKittenCard,
 } from "@ui-kitten/components";
 import { Lobster_400Regular, useFonts } from "@expo-google-fonts/lobster";
-import React, { FC, useLayoutEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BackHandler, Dimensions, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,7 @@ import {
   barcodesAllSortedUsedOrExpiredSelector,
   barcodesAllSortedUsedSelector,
   barcodesByIdSelector,
+  barcodesFilterPhraseSelector,
 } from "../../store/selectors";
 import { Barcode as BarcodeType, BARCODE_TYPE } from "../../store/types";
 import {
@@ -38,6 +39,7 @@ import {
 } from "../../utils";
 import style from "./Home.style";
 import { updateBarcode } from "../../store/actions/barcodeActions";
+import Searchbar from "../../components/Searchbar";
 
 type ModalContentComponentType = {
   id: string;
@@ -131,7 +133,6 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
               style={{ width: Dimensions.get("window").width * 0.6 }}
             ></View>
 
-            {/* <Skeleton isLoading={isLoading}></Skeleton> */}
             {barcode.type !== BARCODE_TYPE.QR ? (
               <Barcode
                 value={barcode.code}
@@ -147,6 +148,12 @@ const ModalContent: FC<ModalContentComponentType> = ({ id, onClose }) => {
   );
 };
 
+const filterByPattern = (search: string) => (barcode: BarcodeType) =>
+  search.length === 0 ||
+  barcode.name.includes(search) ||
+  barcode.description.includes(search) ||
+  barcode.code.includes(search);
+
 const Home: FC = () => {
   const [loaded] = useFonts({
     "Lobster-Regular": Lobster_400Regular,
@@ -154,12 +161,33 @@ const Home: FC = () => {
   const validBarcodes = useSelector(barcodesAllSortedUnusedAndValidSelector);
   const expiredBarcodes = useSelector(barcodesAllSortedExpiredSelector);
   const usedBarcodes = useSelector(barcodesAllSortedUsedSelector);
+
+  const searchPhrase = useSelector(barcodesFilterPhraseSelector);
+  const [filteredValidBarcodes, setFilteredValidBarcodes] =
+    useState(validBarcodes);
+  const [filteredExpiredBarcodes, setFilteredExpiredBarcodes] =
+    useState(expiredBarcodes);
+  const [filteredUsedBarcodes, setFilteredUsedBarcodes] =
+    useState(usedBarcodes);
+
   const [currentBarcode, setCurrentBarcode] = useState<BarcodeType | null>(
     null
   );
   const navigation = useNavigation();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setFilteredExpiredBarcodes(
+      filteredExpiredBarcodes.filter(filterByPattern(searchPhrase))
+    );
+    setFilteredValidBarcodes(
+      filteredValidBarcodes.filter(filterByPattern(searchPhrase))
+    );
+    setFilteredUsedBarcodes(
+      filteredUsedBarcodes.filter(filterByPattern(searchPhrase))
+    );
+  }, [searchPhrase]);
 
   const onClose = () => {
     if (currentBarcode !== null) {
@@ -173,15 +201,16 @@ const Home: FC = () => {
       {loaded ? (
         <>
           <TopBar />
+          <Searchbar />
           <List level="2" spacer>
-            {validBarcodes.length === 0 &&
-              usedBarcodes.length === 0 &&
-              expiredBarcodes.length === 0 && (
+            {filteredValidBarcodes.length === 0 &&
+              filteredUsedBarcodes.length === 0 &&
+              filteredExpiredBarcodes.length === 0 && (
                 <View style={style.emptyContainer}>
                   <Text style={style.emptyText}>{t("empty.home")}</Text>
                 </View>
               )}
-            {validBarcodes.map((barcode, index) => (
+            {filteredValidBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
                 id={barcode.id}
@@ -210,7 +239,7 @@ const Home: FC = () => {
               />
             ))}
 
-            {usedBarcodes.length > 0 && (
+            {filteredUsedBarcodes.length > 0 && (
               <View style={style.divider}>
                 <Text category="c1" appearance="hint" style={style.dividerText}>
                   {t("text.home.used")}
@@ -218,7 +247,7 @@ const Home: FC = () => {
               </View>
             )}
 
-            {usedBarcodes.map((barcode, index) => (
+            {filteredUsedBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
                 id={barcode.id}
@@ -247,7 +276,7 @@ const Home: FC = () => {
               />
             ))}
 
-            {expiredBarcodes.length > 0 && (
+            {filteredExpiredBarcodes.length > 0 && (
               <View style={style.divider}>
                 <Text category="c1" appearance="hint" style={style.dividerText}>
                   {t("text.home.expired")}
@@ -255,7 +284,7 @@ const Home: FC = () => {
               </View>
             )}
 
-            {expiredBarcodes.map((barcode, index) => (
+            {filteredExpiredBarcodes.map((barcode, index) => (
               <Card
                 key={`barcode-card-${index}`}
                 id={barcode.id}

@@ -101,3 +101,8 @@ export const barcodesByIdSelector = createCachedSelector(
   barcodeId,
   (barcodesReducer, id) => barcodesReducer.barcodes.byId[id]
 )((_state_, id) => `barcodes.byId[${id}]`);
+
+export const barcodesFilterPhraseSelector = createCachedSelector(
+  barcodesSelector,
+  (barcodesReducer) => barcodesReducer.filter.phrase
+)((_state_) => "barcodes.filterphrase");

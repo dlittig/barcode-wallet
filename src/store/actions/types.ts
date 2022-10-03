@@ -3,6 +3,8 @@ import {
   BARCODE_ADD,
   BARCODE_DELETE,
   BARCODE_READ_FROM_BACKUP,
+  BARCODE_RESET_FILTER_PHRASE,
+  BARCODE_SET_FILTER_PHRASE,
   BARCODE_UPDATE,
 } from "../constants/barcodeConstants";
 import {
@@ -32,6 +34,13 @@ export type BarcodeActionType =
   | {
       type: typeof BARCODE_READ_FROM_BACKUP;
       payload: BackupPayload;
+    }
+  | {
+      type: typeof BARCODE_SET_FILTER_PHRASE;
+      phrase: string;
+    }
+  | {
+      type: typeof BARCODE_RESET_FILTER_PHRASE;
     };
 
 type CommonResetStateType = {
