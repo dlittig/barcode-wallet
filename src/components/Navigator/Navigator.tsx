@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { withStyles } from "@ui-kitten/components";
-import { NavigationContainer } from "@react-navigation/native";
+import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, TransitionSpecs } from "@react-navigation/stack";
 
 import {
@@ -27,6 +27,9 @@ const options = {
     open: TransitionSpecs.FadeInFromBottomAndroidSpec,
     close: TransitionSpecs.FadeOutToBottomAndroidSpec,
   },
+
+  cardOverlayEnabled: true,
+  cardStyle: { backgroundColor: "green" },
 };
 
 const Navigator: FC<NavigatorComponentType> = ({ eva }) => {
@@ -38,8 +41,15 @@ const Navigator: FC<NavigatorComponentType> = ({ eva }) => {
         ref={(navigationRef) => {
           navigationRef && Navigation.setNavigator(navigationRef);
         }}
+        theme={DarkTheme}
       >
-        <Stack.Navigator initialRouteName={t(APP_HOME)}>
+        <Stack.Navigator
+          initialRouteName={t(APP_HOME)}
+          screenOptions={{
+            cardOverlayEnabled: true,
+            cardStyle: { backgroundColor: "green" },
+          }}
+        >
           <Stack.Screen name={t(APP_HOME)} options={options} component={Home} />
           <Stack.Screen
             name={t(APP_BARCODE_EDIT)}
