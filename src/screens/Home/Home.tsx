@@ -5,7 +5,7 @@ import {
   Text,
   Card as UIKittenCard,
 } from "@ui-kitten/components";
-import { Lobster_400Regular, useFonts } from "@expo-google-fonts/lobster";
+import { useFonts, Lobster_400Regular } from "@expo-google-fonts/lobster";
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BackHandler, Dimensions, StyleSheet, View } from "react-native";
@@ -198,7 +198,7 @@ const Home: FC = () => {
 
   return (
     <>
-      {loaded ? (
+      {loaded === true ? (
         <>
           <TopBar />
           <Searchbar />

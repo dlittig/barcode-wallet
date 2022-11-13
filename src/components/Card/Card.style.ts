@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Lobster-Regular",
+    fontWeight: "normal",
   },
   header: {
     paddingTop: 10,
